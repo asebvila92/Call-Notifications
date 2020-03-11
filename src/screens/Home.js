@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
 import sendNotification from '../config/notificationsConfig';
 import DateTimePicker from '../components/DateTimePicker';
 import { formatDate } from '../helpers/dateHelpers';
+import { addLog } from '../helpers/firebaseConsults';
 
 export default function Home() {
   const [date, setDate] =
@@ -26,6 +27,7 @@ export default function Home() {
     if (saved) {
       Alert.alert("Notificacion Guardada");
       //firebase here
+      addLog(client, article, date);
     } else {
       Alert.alert("Fecha invalida o cliente vacio");
     }
