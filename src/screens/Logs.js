@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, ActivityIndicator } from 'react-native';
-import firebase from '../config/firebaseConfig'
 import { Row, Rows, Table } from 'react-native-table-component'
 import { formatDate } from '../helpers/dateHelpers';
+import { fetchLogs } from '../helpers/firebaseConsults';
 
 export default function Logs() {
   const [logs, setLogs] = useState();
@@ -11,7 +11,7 @@ export default function Logs() {
 
   useEffect(() => {
     refreshLogs()
-  }, [getLogs]);
+  }, [fetchLogs]);
 
   function refreshLogs() {
     setIsLoading(true)
@@ -55,18 +55,7 @@ export default function Logs() {
 }
 
 function getLogs() {
-  return new Promise((resolve, reject) => {
-    let db = firebase.firestore();
-    db.collection("Notifications")
-      .get()
-      .then((querySnapshot) => {
-        const docs = querySnapshot.docs.map((doc) => {
-          return doc.data()
-        })
-        const logs = docs.length === 0 ? null : docs;
-        resolve(logs)
-      });
-  })
+  return fetchLogs()
 }
 
 const styles = StyleSheet.create({
