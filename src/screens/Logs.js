@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native';
 import { Row, Rows, Table } from 'react-native-table-component';
 import { formatDate } from '../helpers/dateHelpers';
 import { fetchLogs, deleteLog } from '../helpers/firebaseConsults';
@@ -59,10 +59,16 @@ export default function Logs() {
         isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : null
       }
       {logs ?
-        <Table borderStyle={{ /*borderWidth: 2,*/ borderColor: 'transparent' }}>
-          <Row data={tableHead} style={styles.head} textStyle={styles.text} />
-          <Rows data={createTable()} textStyle={styles.text} />
-        </Table>
+        <View style={styles.logView}>
+          <Table>
+            <Row data={tableHead} style={styles.head} textStyle={styles.text} />
+          </Table>
+          <ScrollView>
+            <Table borderStyle={{ /*borderWidth: 2,*/ borderColor: 'transparent' }}>
+              <Rows data={createTable()} textStyle={styles.text} />
+            </Table>
+          </ScrollView>
+        </View>
         : null
       }
     </View>
@@ -93,6 +99,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 30,
     padding: 2
+  },
+  logView: {
+    paddingBottom: 65
   }
 });
 
