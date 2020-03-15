@@ -55,6 +55,7 @@ export default function Logs() {
   return (
     <View style={styles.container}>
       <Button title="Recargar" onPress={refreshLogs} />
+      <Text style={styles.text}>Precione el nombre del cliente para elimiar el registro</Text>
       {
         isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : null
       }
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
   },
   head: {
     height: 40,
-    backgroundColor: '#f1f8ff'
+    backgroundColor: '#b2cbe3'
   },
   text: {
     margin: 6
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
     padding: 2
   },
   logView: {
-    paddingBottom: 65
+    marginBottom: 119
   }
 });
 
