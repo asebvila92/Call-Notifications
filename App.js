@@ -3,6 +3,7 @@ import { NavigationNativeContainer } from '@react-navigation/native';
 import { createStackNavigator, HeaderTitle } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome } from '@expo/vector-icons';
+import { createChannelNotification } from './src/config/notificationsConfig';
 import Home from './src/screens/Home';
 import Logs from './src/screens/Logs';
 
@@ -48,6 +49,7 @@ function LogsStackScreen() {
 
 const Tab = createBottomTabNavigator();
 function App() {
+  createChannelNotification();
   return (
     <NavigationNativeContainer>
       <Tab.Navigator
