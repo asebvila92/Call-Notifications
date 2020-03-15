@@ -20,7 +20,7 @@ export default function Logs() {
       (response) => {
         setLogs(response)
         setIsLoading(false)
-        createTable()
+        logs ? createTable() : null
       },
       (err) => {
         //console.warn(err)
