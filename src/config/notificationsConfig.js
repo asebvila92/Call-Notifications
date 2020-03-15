@@ -1,4 +1,5 @@
 import { Notifications } from 'expo';
+import { Platform } from 'react-native';
 import { changeHourOfDate, formatDate } from '../helpers/dateHelpers';
 import { Alert } from 'react-native';
 
@@ -18,11 +19,16 @@ export function sendNotification(
     let localNotification = {
       origin: 'selected',
       title: title,
+      body: "Te recordamos para que no olvides llamar a tus clientes. Pueden estar necesitando racion! Hoy deberias averiguar si " +
+        client.toUpperCase() + " necesita " + article.toUpperCase() + " en los proximos dias",
       remote: false,
+      android: {
+        channelId: 'call-notifications'
+      },
     };
 
     let schedulingOptions = {
-      time: new Date().getTime() + 50000, //dateNotification.getTime() //
+      time: new Date().getTime() + 20000, //dateNotification.getTime() //
     };
 
     Alert.alert(
@@ -55,4 +61,18 @@ export function sendNotification(
 export function dismissNotification(notificationId) {
   //console.warn(notificationId);
   Notifications.cancelScheduledNotificationAsync(notificationId)
+}
+
+export function createChannelNotification() {
+  if (Platform.OS === 'android') {
+    Notifications.createChannelAndroidAsync('call-notifications', {
+      name: 'Call clients',
+      description: 'Para que no olvides llamar a tus clientes. Pueden estar necesitando racion!',
+      sound: true,
+      priority: 'high',
+      vibrate: true,
+      badge: true
+    });
+  }
+
 }
