@@ -1,24 +1,29 @@
 import { Notifications } from 'expo';
-import { changeHourOfDate, formatDate } from '../helpers/dateHelpers'
+import { changeHourOfDate, formatDate } from '../helpers/dateHelpers';
 import { Alert } from 'react-native';
 
-export default function sendNotification(client, article, date, confirmSaveNotification) {
+export function sendNotification(
+  client,
+  article,
+  date,
+  confirmSaveNotification,
+) {
   let validDate = false;
 
-  if (date > new Date() && client != "") {
+  if (date > new Date() && client != '') {
     validDate = true;
     let dateNotification = changeHourOfDate(date);
-    let title = article ? client + " " + article : client;
+    let title = article ? client + ' ' + article : client;
 
     let localNotification = {
-      origin: "selected",
+      origin: 'selected',
       title: title,
       remote: false,
-    }
+    };
 
     let schedulingOptions = {
-      time: dateNotification.getTime() // 
-    }
+      time: new Date().getTime() + 50000, //dateNotification.getTime() //
+    };
 
     Alert.alert(
       'Nueva Notificacion',
@@ -31,9 +36,11 @@ export default function sendNotification(client, article, date, confirmSaveNotif
         {
           text: 'OK',
           onPress: () => {
-            //Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptions)
-            confirmSaveNotification(true)
-          }
+            Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptions).then(
+              (response) => confirmSaveNotification(true, response),
+              (err) => confirmSaveNotification(false, err)
+            )
+          },
         },
       ],
       { cancelable: false },
@@ -41,6 +48,11 @@ export default function sendNotification(client, article, date, confirmSaveNotif
   }
 
   if (!validDate) {
-    confirmSaveNotification(false)
+    confirmSaveNotification(false);
   }
+}
+
+export function dismissNotification(notificationId) {
+  //console.warn(notificationId);
+  Notifications.cancelScheduledNotificationAsync(notificationId)
 }

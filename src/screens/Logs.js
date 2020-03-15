@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, ActivityIndicator } from 'react-native';
-import { Row, Rows, Table } from 'react-native-table-component'
+import { StyleSheet, Text, View, Button, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { Row, Rows, Table } from 'react-native-table-component';
 import { formatDate } from '../helpers/dateHelpers';
-import { fetchLogs } from '../helpers/firebaseConsults';
+import { fetchLogs, deleteLog } from '../helpers/firebaseConsults';
+import { dismissNotification } from '../config/notificationsConfig';
 
 export default function Logs() {
   const [logs, setLogs] = useState();
@@ -28,12 +29,26 @@ export default function Logs() {
 
   }
 
+  function handleDeleteNotification(logId, notificationId) {
+    dismissNotification(notificationId);
+    deleteLog(logId);
+    refreshLogs();
+  }
+
   function createTable() {
     const arrayLogs = logs.map((log, key) => {
       const nextDelivery = new Date(log.nextDelivery.seconds * 1000)
       const lastDelivery = new Date(log.lastDelivery.seconds * 1000)
-      return [log.client, formatDate(nextDelivery), formatDate(lastDelivery), log.article,]
+      return [
+        <TouchableOpacity style={styles.button} onPress={() => handleDeleteNotification(log.id, log.notificationId)}>
+          <Text>{log.client}</Text>
+        </TouchableOpacity>,
+        formatDate(nextDelivery),
+        formatDate(lastDelivery),
+        log.article
+      ]
     })
+
     return arrayLogs
   }
 
@@ -44,7 +59,7 @@ export default function Logs() {
         isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : null
       }
       {logs ?
-        <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
+        <Table borderStyle={{ /*borderWidth: 2,*/ borderColor: 'transparent' }}>
           <Row data={tableHead} style={styles.head} textStyle={styles.text} />
           <Rows data={createTable()} textStyle={styles.text} />
         </Table>
@@ -71,6 +86,13 @@ const styles = StyleSheet.create({
   },
   text: {
     margin: 6
+  },
+  button: {
+    backgroundColor: "#2196f3",
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 30,
+    padding: 2
   }
 });
 
