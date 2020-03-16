@@ -35,11 +35,11 @@ export default function Logs() {
       'Confirma que desea eliminar el registro de ' + clientName + '?',
       [
         {
-          text: 'No',
+          text: 'Cancelar',
           style: 'cancel',
         },
         {
-          text: 'Si',
+          text: 'Aceptar',
           onPress: () => {
             dismissNotification(notificationId);
             deleteLog(logId);
