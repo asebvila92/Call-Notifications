@@ -13,8 +13,8 @@ export default function Home() {
       new Date().getDate(),
     ),
   );
-  const [client, setClient] = useState();
-  const [article, setArticle] = useState();
+  const [client, setClient] = useState('');
+  const [article, setArticle] = useState('');
 
   function handleGetSelectedDate(date) {
     setDate(date);
