@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, ActivityIndicator, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Row, Rows, Table } from 'react-native-table-component';
 import { formatDate } from '../helpers/dateHelpers';
 import { fetchLogs, deleteLog } from '../helpers/firebaseConsults';
@@ -20,7 +20,7 @@ export default function Logs() {
       (response) => {
         setLogs(response)
         setIsLoading(false)
-        createTable()
+        logs ? createTable() : null
       },
       (err) => {
         //console.warn(err)
@@ -29,10 +29,26 @@ export default function Logs() {
 
   }
 
-  function handleDeleteNotification(logId, notificationId) {
-    dismissNotification(notificationId);
-    deleteLog(logId);
-    refreshLogs();
+  function handleDeleteNotification(logId, notificationId, clientName) {
+    Alert.alert(
+      'Aviso',
+      'Confirma que desea eliminar el registro de ' + clientName + '?',
+      [
+        {
+          text: 'No',
+          style: 'cancel',
+        },
+        {
+          text: 'Si',
+          onPress: () => {
+            dismissNotification(notificationId);
+            deleteLog(logId);
+            refreshLogs();
+          }
+        }
+      ]
+    )
+
   }
 
   function createTable() {
@@ -40,7 +56,7 @@ export default function Logs() {
       const nextDelivery = new Date(log.nextDelivery.seconds * 1000)
       const lastDelivery = new Date(log.lastDelivery.seconds * 1000)
       return [
-        <TouchableOpacity style={styles.button} onPress={() => handleDeleteNotification(log.id, log.notificationId)}>
+        <TouchableOpacity style={styles.button} onPress={() => handleDeleteNotification(log.id, log.notificationId, log.client)}>
           <Text>{log.client}</Text>
         </TouchableOpacity>,
         formatDate(nextDelivery),
@@ -55,14 +71,21 @@ export default function Logs() {
   return (
     <View style={styles.container}>
       <Button title="Recargar" onPress={refreshLogs} />
+      <Text style={styles.text}>Precione el nombre del cliente para elimiar el registro</Text>
       {
         isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : null
       }
       {logs ?
-        <Table borderStyle={{ /*borderWidth: 2,*/ borderColor: 'transparent' }}>
-          <Row data={tableHead} style={styles.head} textStyle={styles.text} />
-          <Rows data={createTable()} textStyle={styles.text} />
-        </Table>
+        <View style={styles.logView}>
+          <Table>
+            <Row data={tableHead} style={styles.head} textStyle={styles.text} />
+          </Table>
+          <ScrollView>
+            <Table borderStyle={{ /*borderWidth: 2,*/ borderColor: 'transparent' }}>
+              <Rows data={createTable()} textStyle={styles.text} />
+            </Table>
+          </ScrollView>
+        </View>
         : null
       }
     </View>
@@ -82,7 +105,7 @@ const styles = StyleSheet.create({
   },
   head: {
     height: 40,
-    backgroundColor: '#f1f8ff'
+    backgroundColor: '#b2cbe3'
   },
   text: {
     margin: 6
@@ -93,6 +116,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 30,
     padding: 2
+  },
+  logView: {
+    marginBottom: 119
   }
 });
 

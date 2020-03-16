@@ -20,7 +20,7 @@ export function sendNotification(
       origin: 'selected',
       title: title,
       body: "Te recordamos para que no olvides llamar a tus clientes. Pueden estar necesitando racion! Hoy deberias averiguar si " +
-        client.toUpperCase() + " necesita " + article.toUpperCase() + " en los proximos dias",
+        client.toUpperCase() + " necesita RACION en los proximos dias",
       remote: false,
       android: {
         channelId: 'call-notifications'

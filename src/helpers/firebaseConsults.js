@@ -4,6 +4,7 @@ export function fetchLogs() {
   return new Promise((resolve, reject) => {
     let db = firebase.firestore();
     db.collection("Notifications")
+      .orderBy("nextDelivery")
       .get()
       .then((querySnapshot) => {
         const docs = querySnapshot.docs.map((doc) => {
