@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button, ActivityIndicator, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Row, Rows, Table } from 'react-native-table-component';
 import { formatDate } from '../helpers/dateHelpers';
 import { fetchLogs, deleteLog } from '../helpers/firebaseConsults';
@@ -29,10 +29,26 @@ export default function Logs() {
 
   }
 
-  function handleDeleteNotification(logId, notificationId) {
-    dismissNotification(notificationId);
-    deleteLog(logId);
-    refreshLogs();
+  function handleDeleteNotification(logId, notificationId, clientName) {
+    Alert.alert(
+      'Aviso',
+      'Confirma que desea eliminar el registro de ' + clientName + '?',
+      [
+        {
+          text: 'No',
+          style: 'cancel',
+        },
+        {
+          text: 'Si',
+          onPress: () => {
+            dismissNotification(notificationId);
+            deleteLog(logId);
+            refreshLogs();
+          }
+        }
+      ]
+    )
+
   }
 
   function createTable() {
@@ -40,7 +56,7 @@ export default function Logs() {
       const nextDelivery = new Date(log.nextDelivery.seconds * 1000)
       const lastDelivery = new Date(log.lastDelivery.seconds * 1000)
       return [
-        <TouchableOpacity style={styles.button} onPress={() => handleDeleteNotification(log.id, log.notificationId)}>
+        <TouchableOpacity style={styles.button} onPress={() => handleDeleteNotification(log.id, log.notificationId, log.client)}>
           <Text>{log.client}</Text>
         </TouchableOpacity>,
         formatDate(nextDelivery),
