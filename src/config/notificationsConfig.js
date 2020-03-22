@@ -28,7 +28,7 @@ export function sendNotification(
     };
 
     let schedulingOptions = {
-      time: new Date().getTime() + 20000, //dateNotification.getTime() //
+      time: dateNotification.getTime()
     };
 
     Alert.alert(
