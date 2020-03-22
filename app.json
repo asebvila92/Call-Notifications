@@ -5,29 +5,22 @@
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [
-      "ios",
-      "android",
-      "web"
+      "android"
     ],
     "version": "1.0.0",
-    "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splashScreen1.png",
       "resizeMode": "contain",
       "backgroundColor": "#4167b0"
     },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.halloweenkennel.halloweenkennel",
+      "buildNumber": "1.0.0"
     },
-    "notification": {
-      "color": "red"
+    "android": {
+      "package": "com.halloweenkennel.halloweenkennel",
+      "versionCode": 1
     }
   }
 }
