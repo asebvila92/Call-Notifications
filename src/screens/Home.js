@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
 import { sendNotification } from '../config/notificationsConfig';
 import DateTimePicker from '../components/DateTimePicker';
@@ -15,22 +15,24 @@ export default function Home() {
   );
   const [client, setClient] = useState('');
   const [article, setArticle] = useState('');
+  const inputClient = useRef(null);
 
-  function handleGetSelectedDate(date) {
-    setDate(date);
-  }
   function handleChangeClient(value) {
     setClient(value);
   }
   function handleChangeArticle(value) {
     setArticle(value);
   }
+  function resetInputs() {
+    setArticle('')
+    setClient('')
+    inputClient.current.focus();
+  }
 
   function confirmSaveNotification(saved, notificationId) {
     if (saved) {
       Alert.alert('Notificacion Guardada');
-      //console.warn(notificationId)
-      //firebase here
+      resetInputs();
       addLog(client, article, date, notificationId);
     } else {
       Alert.alert('Error al crear Notificacion o Datos invalidos');
@@ -47,6 +49,7 @@ export default function Home() {
         <Text style={styles.title}>Nueva Notificacion</Text>
         <View>
           <TextInput
+            ref={inputClient}
             style={styles.inpt}
             value={client}
             placeholder="Cliente"
