@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, ActivityIndicator } from 'react-native';
-import firebase from '../config/firebaseConfig'
-import { Row, Rows, Table } from 'react-native-table-component'
+import { StyleSheet, Text, View, Button, ActivityIndicator, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { Row, Rows, Table } from 'react-native-table-component';
 import { formatDate } from '../helpers/dateHelpers';
+import { fetchLogs, deleteLog } from '../helpers/firebaseConsults';
+import { dismissNotification } from '../config/notificationsConfig';
 
 export default function Logs() {
   const [logs, setLogs] = useState();
@@ -11,7 +12,7 @@ export default function Logs() {
 
   useEffect(() => {
     refreshLogs()
-  }, [getLogs]);
+  }, [fetchLogs]);
 
   function refreshLogs() {
     setIsLoading(true)
@@ -19,7 +20,7 @@ export default function Logs() {
       (response) => {
         setLogs(response)
         setIsLoading(false)
-        createTable()
+        logs ? createTable() : null
       },
       (err) => {
         //console.warn(err)
@@ -28,26 +29,63 @@ export default function Logs() {
 
   }
 
+  function handleDeleteNotification(logId, notificationId, clientName) {
+    Alert.alert(
+      'Aviso',
+      'Confirma que desea eliminar el registro de ' + clientName + '?',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+        {
+          text: 'Aceptar',
+          onPress: () => {
+            dismissNotification(notificationId);
+            deleteLog(logId);
+            refreshLogs();
+          }
+        }
+      ]
+    )
+
+  }
+
   function createTable() {
     const arrayLogs = logs.map((log, key) => {
       const nextDelivery = new Date(log.nextDelivery.seconds * 1000)
       const lastDelivery = new Date(log.lastDelivery.seconds * 1000)
-      return [log.client, formatDate(nextDelivery), formatDate(lastDelivery), log.article,]
+      return [
+        <TouchableOpacity style={styles.button} onPress={() => handleDeleteNotification(log.id, log.notificationId, log.client)}>
+          <Text>{log.client}</Text>
+        </TouchableOpacity>,
+        formatDate(nextDelivery),
+        formatDate(lastDelivery),
+        log.article
+      ]
     })
+
     return arrayLogs
   }
 
   return (
     <View style={styles.container}>
       <Button title="Recargar" onPress={refreshLogs} />
+      <Text style={styles.text}>Precione el nombre del cliente para elimiar el registro</Text>
       {
         isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : null
       }
       {logs ?
-        <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
-          <Row data={tableHead} style={styles.head} textStyle={styles.text} />
-          <Rows data={createTable()} textStyle={styles.text} />
-        </Table>
+        <View style={styles.logView}>
+          <Table>
+            <Row data={tableHead} style={styles.head} textStyle={styles.text} />
+          </Table>
+          <ScrollView>
+            <Table borderStyle={{ /*borderWidth: 2,*/ borderColor: 'transparent' }}>
+              <Rows data={createTable()} textStyle={styles.text} />
+            </Table>
+          </ScrollView>
+        </View>
         : null
       }
     </View>
@@ -55,18 +93,7 @@ export default function Logs() {
 }
 
 function getLogs() {
-  return new Promise((resolve, reject) => {
-    let db = firebase.firestore();
-    db.collection("Notifications")
-      .get()
-      .then((querySnapshot) => {
-        const docs = querySnapshot.docs.map((doc) => {
-          return doc.data()
-        })
-        const logs = docs.length === 0 ? null : docs;
-        resolve(logs)
-      });
-  })
+  return fetchLogs()
 }
 
 const styles = StyleSheet.create({
@@ -78,11 +105,19 @@ const styles = StyleSheet.create({
   },
   head: {
     height: 40,
-    backgroundColor: '#f1f8ff'
+    backgroundColor: '#b2cbe3'
   },
   text: {
     margin: 6
+  },
+  button: {
+    backgroundColor: "#2196f3",
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 30,
+    padding: 2
+  },
+  logView: {
+    marginBottom: 119
   }
 });
-
-//.where('nextDelivery', '==', 'Hulk')
