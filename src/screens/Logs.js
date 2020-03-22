@@ -121,5 +121,3 @@ const styles = StyleSheet.create({
     marginBottom: 119
   }
 });
-
-//.where('nextDelivery', '==', 'Hulk')
