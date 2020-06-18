@@ -2,54 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, ActivityIndicator, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Row, Rows, Table } from 'react-native-table-component';
 import { formatDate } from '../helpers/dateHelpers';
-import { fetchLogs, deleteLog } from '../helpers/firebaseConsults';
-import { dismissNotification } from '../config/notificationsConfig';
 
-export default function Logs() {
-  const [logs, setLogs] = useState();
-  const [isLoading, setIsLoading] = useState(true)
+export default function Deliveries() {
+  const [logs, setLogs] = useState([]);
+  const [isLoading, setIsLoading] = useState(false)
   const tableHead = ["cliente", "proxima entrega", "ultima entrega", "articulo"];
-
-  useEffect(() => {
-    //refreshLogs()
-  }, [fetchLogs]);
-
-  function refreshLogs() {
-    setIsLoading(true)
-    getLogs().then(
-      (response) => {
-        setLogs(response)
-        setIsLoading(false)
-        logs ? createTable() : null
-      },
-      (err) => {
-        //console.warn(err)
-      }
-    )
-
-  }
-
-  function handleDeleteNotification(logId, notificationId, clientName) {
-    Alert.alert(
-      'Aviso',
-      'Confirma que desea eliminar el registro de ' + clientName + '?',
-      [
-        {
-          text: 'Cancelar',
-          style: 'cancel',
-        },
-        {
-          text: 'Aceptar',
-          onPress: () => {
-            dismissNotification(notificationId);
-            deleteLog(logId);
-            refreshLogs();
-          }
-        }
-      ]
-    )
-
-  }
 
   function createTable() {
     const arrayLogs = logs.map((log, key) => {
@@ -68,12 +25,16 @@ export default function Logs() {
     return arrayLogs
   }
 
+  function refreshLogs(){
+    console.warn('refresh logs')
+  }
+
   return (
     <View style={styles.container}>
-      <Button title="Recargar" />
+      <Button title="Recargar" onPress={refreshLogs} />
       <Text style={styles.text}>Precione el nombre del cliente para elimiar el registro</Text>
       {
-       //isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : null
+        isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : null
       }
       {logs ?
         <View style={styles.logView}>
@@ -92,9 +53,6 @@ export default function Logs() {
   );
 }
 
-function getLogs() {
-  return fetchLogs()
-}
 
 const styles = StyleSheet.create({
   container: {
