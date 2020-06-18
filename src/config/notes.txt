@@ -1,0 +1,9 @@
+colors
+black font: #4d4f5c
+red: #d44d54 #FF5A5F
+grey background: #f4f5fa
+skyblue background #e6f3fb
+yellow: #ffcc4d
+
+blue: ['#1885f2', '#2b8ff3', '#1cacdc']
+

@@ -5,7 +5,7 @@ import DateTimePicker from '../components/DateTimePicker';
 import { formatDate } from '../helpers/dateHelpers';
 import { addLog } from '../helpers/firebaseConsults';
 
-export default function Home() {
+export default function NewDelivery() {
   const [date, setDate] = useState(
     new Date(
       new Date().getYear() + 1900,

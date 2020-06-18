@@ -1,4 +1,5 @@
-import firebase from '../config/firebaseConfig'
+//import firebase from '../config/firebaseConfig'
+//this is commented because we don't have old credentials of firebase published in the repository
 
 export function fetchLogs() {
   return new Promise((resolve, reject) => {
