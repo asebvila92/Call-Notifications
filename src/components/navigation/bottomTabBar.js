@@ -1,61 +1,87 @@
-import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, Keyboard } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function MyTabBar({ state, descriptors, navigation }) {
+  const [isVisible, setIsVisible] = useState(true)
+
+  function keyboardWillShow(event) {
+    setIsVisible(false)
+  }
+
+  function keyboardWillHide(event) {
+    setIsVisible(true)
+  }
+
+  useEffect(() => {
+    //DidMount
+    Keyboard.addListener('keyboardDidShow', keyboardWillShow)
+    Keyboard.addListener('keyboardDidHide', keyboardWillHide)
+    return(
+      () => {
+        // WillUnmount
+        Keyboard.removeListener('keyboardDidShow', keyboardWillShow)
+        Keyboard.removeListener('keyboardDidHide', keyboardWillHide)
+      }
+    )
+  }, [])
+
 
   return (
-    <SafeAreaView style={{backgroundColor: '#1885f2'}}>
-      <LinearGradient
-        colors={['#1885f2', '#2b8ff3', '#1cacdc']}
-      > 
-        <View style={styles.container}>
-          {state.routes.map((route, index) => {
-            const { options } = descriptors[route.key];
-            const label = options.title
-            const isFocused = state.index === index;
-            
-            const onPress = () => {
-              const event = navigation.emit({
-                type: 'tabPress',
-                target: route.key,
-              });
+    isVisible ? 
+      <SafeAreaView style={{backgroundColor: '#1885f2'}}>
+        <LinearGradient
+          colors={['#1885f2', '#2b8ff3', '#1cacdc']}
+        > 
+          <View style={styles.container}>
+            {state.routes.map((route, index) => {
+              const { options } = descriptors[route.key];
+              const label = options.title
+              const isFocused = state.index === index;
+              
+              const onPress = () => {
+                const event = navigation.emit({
+                  type: 'tabPress',
+                  target: route.key,
+                });
 
-              if (!isFocused && !event.defaultPrevented) {
-                navigation.navigate(route.name);
-              }
-            };
-
-            const onLongPress = () => {
-              navigation.emit({
-                type: 'tabLongPress',
-                target: route.key,
-              });
-            };
-
-            return (
-              <TouchableOpacity
-                key={index}
-                accessibilityRole="button"
-                onPress={onPress}
-                onLongPress={onLongPress}
-                style={isFocused ? styles.touchItemFocus : styles.touchItem}
-              >
-                <View style={isFocused ? styles.itemImageFocus : null}>
-                {
-                  options.tabBarIcon({isFocused})
+                if (!isFocused && !event.defaultPrevented) {
+                  navigation.navigate(route.name);
                 }
-                </View>
-                <Text style={styles.itemLabel}>
-                  {label}
-                </Text> 
-              </TouchableOpacity> 
-            );
-          })}
-        </View>
-      </LinearGradient>
-    </SafeAreaView>
+              };
+
+              const onLongPress = () => {
+                navigation.emit({
+                  type: 'tabLongPress',
+                  target: route.key,
+                });
+              };
+
+              return (
+                <TouchableOpacity
+                  key={index}
+                  accessibilityRole="button"
+                  onPress={onPress}
+                  onLongPress={onLongPress}
+                  style={isFocused ? styles.touchItemFocus : styles.touchItem}
+                >
+                  <View style={isFocused ? styles.itemImageFocus : null}>
+                  {
+                    options.tabBarIcon({isFocused})
+                  }
+                  </View>
+                  <Text style={styles.itemLabel}>
+                    {label}
+                  </Text> 
+                </TouchableOpacity> 
+              );
+            })}
+          </View>
+        </LinearGradient>
+      </SafeAreaView>
+    :
+    <View></View>  
   );
 }
 
