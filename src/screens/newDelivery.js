@@ -1,74 +1,71 @@
 import React, { useState, useRef } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
-import { sendNotification } from '../config/notificationsConfig';
+import { StyleSheet, Text, View, Button, TextInput, ScrollView, Alert } from 'react-native';
+import InputWithIcon from '../components/navigation/inputWithIcon';
+import ButtonWithGradient from '../components/navigation/buttonWithGradient';
 import DateTimePicker from '../components/DateTimePicker';
-import { formatDate } from '../helpers/dateHelpers';
-import { addLog } from '../helpers/firebaseConsults';
 
 export default function NewDelivery() {
-  const [date, setDate] = useState(
+  const [nextDelivery, setNextDelivery] = useState(
     new Date(
       new Date().getYear() + 1900,
       new Date().getMonth() + 1,
       new Date().getDate(),
     ),
   );
+  const [lastDelivery, setLastDelivery] = useState(
+    new Date(
+      new Date().getYear() + 1900,
+      new Date().getMonth(),
+      new Date().getDate(),
+    ),
+  );
   const [client, setClient] = useState('');
   const [article, setArticle] = useState('');
+  const [price, setPrice] = useState('');
+  const [address, setAddress] = useState('');
+  const [phone, setPhone] = useState('');
+  const [observations, setObservations] = useState('');
   const inputClient = useRef(null);
 
-  function handleChangeClient(value) {
-    setClient(value);
+  function saveDelivery() {
+    Alert.alert('',`${client}\n${article}\n${price}\nproxima: ${nextDelivery}\nultima: ${lastDelivery}\n${address}\n${phone}\n${observations}`);
+    //resetInputs();
   }
-  function handleChangeArticle(value) {
-    setArticle(value);
-  }
+
   function resetInputs() {
     setArticle('')
     setClient('')
+    setPrice('')
+    setAddress('')
+    setPhone('')
+    setObservations('')
     inputClient.current.focus();
   }
 
-  function confirmSaveNotification(saved, notificationId) {
-    if (saved) {
-      Alert.alert('Notificacion Guardada');
-      resetInputs();
-      addLog(client, article, date, notificationId);
-    } else {
-      Alert.alert('Error al crear Notificacion o Datos invalidos');
-    }
-  }
-
-  function handleSaveNotification() {
-    sendNotification(client, article, date, confirmSaveNotification);
-  }
-
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Nueva Notificacion</Text>
-        <View>
+        <InputWithIcon value={client} onChangeValue={setClient} placeholder='Cliente' iconType='font-awesome' iconName='user' color='#1885f2' reference={inputClient} />
+        <InputWithIcon value={article} onChangeValue={setArticle} placeholder='Articulo' iconType='font-awesome' iconName='shopping-cart' color='#1885f2'/>
+        <DateTimePicker legend='Proxima entrega' iconColor='red' date={nextDelivery} onSelectedDate={setNextDelivery} />
+        <DateTimePicker legend='Ultima entrega' iconColor='green' date={lastDelivery} onSelectedDate={setLastDelivery} />
+        <InputWithIcon value={price} onChangeValue={setPrice} placeholder='Precio' type='numeric' iconType='font-awesome' iconName='money' color='#1885f2'/>
+        <InputWithIcon value={address} onChangeValue={setAddress} placeholder='Direccion' iconType='fontisto' iconName='home' color='#1885f2'/>
+        <InputWithIcon value={phone} onChangeValue={setPhone} placeholder='Telefono' type='phone-pad' iconType='font-awesome' iconName='phone' color='#1885f2'/>
+        <View style={styles.vwTextArea}>
           <TextInput
-            ref={inputClient}
-            style={styles.inpt}
-            value={client}
-            placeholder="Cliente"
-            onChangeText={handleChangeClient}
-          />
-          <TextInput
-            style={styles.inpt}
-            value={article}
-            placeholder="Articulo"
-            onChangeText={handleChangeArticle}
+            value={observations}
+            onChangeText={setObservations} 
+            style={styles.textArea}
+            placeholder="Observaciones"
+            placeholderTextColor="#1885f2"
+            numberOfLines={2} 
+            multiline={true} 
           />
         </View>
-        <View style={styles.dateTimePicker}>
-          <Text style={{ fontSize: 17 }}>Dia: {formatDate(date)}</Text>
-          <DateTimePicker onSelectedDate={setDate} />
-        </View>
-        <Button title="Guardar" />
+        <ButtonWithGradient text='GUARDAR' onPressbtn={saveDelivery} /> 
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -78,29 +75,20 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: 'white',
   },
-  headerTitle: {
-    fontSize: 20,
-  },
-  title: {
-    fontSize: 20,
-    marginBottom: 15,
-  },
   content: {
     padding: 20,
     flex: 1,
   },
-  dateTimePicker: {
-    marginBottom: 30,
-    marginTop: 5,
-  },
-  vwHeader: {
-    flex: 0.1,
-  },
-  inpt: {
-    borderStyle: 'solid',
-    borderBottomWidth: 1,
-    borderBottomColor: 'blue',
-    marginBottom: 10,
+  title: {
     fontSize: 20,
+    marginBottom: 20,
+  },
+  textArea: {
+    fontSize: 18,
+    textAlignVertical: 'top',
+    backgroundColor: '#efefef',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10
   },
 });
