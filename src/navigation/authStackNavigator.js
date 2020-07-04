@@ -6,8 +6,8 @@ import Header from '../components/layout/header';
 import BottomTabBar from '../components/layout/bottomTabBar';
 import Home from '../screens/Home';
 import Logs from '../screens/Logs';
-import NewDelivery from '../screens/newDelivery'
-import Deliveries from '../screens/deliveries'
+import NewDelivery from '../screens/newDelivery';
+import Deliveries from '../screens/deliveries';
 
 const HomeStack = createStackNavigator();
 function HomeStackScreen() {
