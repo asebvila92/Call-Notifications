@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-navigation';
 import { Header } from 'react-native-elements';
 import { FontAwesome } from '@expo/vector-icons';
 import Constants from 'expo-constants';
-import Avatar from './avatar';
+import Avatar from '../navigation/avatar';
 
 
 export default function HeaderApp(props) {

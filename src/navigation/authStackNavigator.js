@@ -2,8 +2,8 @@ import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, Image } from 'react-native'
-import Header from '../components/navigation/header';
-import BottomTabBar from '../components/navigation/bottomTabBar';
+import Header from '../components/layout/header';
+import BottomTabBar from '../components/layout/bottomTabBar';
 import Home from '../screens/Home';
 import Logs from '../screens/Logs';
 import NewDelivery from '../screens/newDelivery'

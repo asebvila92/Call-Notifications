@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {formatDate} from '../helpers/dateHelpers';
+import {formatDate} from '../../helpers/dateHelpers';
 
 export default function DateTimePicker(props) {
   const { legend, iconColor, date, onSelectedDate } = props
