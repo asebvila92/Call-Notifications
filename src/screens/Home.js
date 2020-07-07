@@ -1,10 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Button } from 'react-native';
+import { useDispatch } from 'react-redux';
 import WidgetDashboard from '../components/navigation/widgetDashboard';
 import { ListItem, Divider } from 'react-native-elements';
+import { invokeLogout } from '../redux/actions';
 
 export default function Home(props) {
   const { navigation } = props;
+  const dispatch = useDispatch()
   //mook list
   const list = [
     {
@@ -39,9 +42,13 @@ export default function Home(props) {
     },
   ]
   
+  function logout() {
+    invokeLogout(dispatch)
+  }
   
   return (
     <View style={styles.container}>
+      <Button title='Log out' onPress={logout}/>
       <Text style={styles.welcome}>
         <Text style={styles.username}>Bienvenido Nelson</Text>, 
         mira las entregas para hoy rapidamente aqui debajo:
