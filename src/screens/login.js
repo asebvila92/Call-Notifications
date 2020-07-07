@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { invokeLogin } from '../redux/actions/auth';
 
 export default function Login(props) {
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
+  const [username, setUsername] = useState('nelson');
+  const [password, setPassword] = useState('1954');
+  const dispatch = useDispatch();
+
+  function handleLogin(){
+    invokeLogin(dispatch, username, password)
+  }
 
   return (
     <View style={styles.container}>
@@ -24,7 +31,7 @@ export default function Login(props) {
         {
           //<ActivityIndicator style={styles.loader} size="large" color="#ffff" /> 
         }
-        <TouchableOpacity style={styles.btnLogin}>
+        <TouchableOpacity style={styles.btnLogin} onPress={handleLogin}>
           <Text style={styles.txtLogin}>Entrar</Text>
         </TouchableOpacity>
 
