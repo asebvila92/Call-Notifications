@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { invokeLogin } from '../redux/actions/auth';
 
 export default function Login(props) {
   const [username, setUsername] = useState('nelson');
   const [password, setPassword] = useState('1954');
+  const isLoading = useSelector((store) => store.auth.isLoading);
+  const errorAuth = useSelector((store) => store.auth.errorAuth);
   const dispatch = useDispatch();
 
   function handleLogin(){
@@ -29,7 +31,10 @@ export default function Login(props) {
           value={password}
           onChangeText={setPassword}/>
         {
-          //<ActivityIndicator style={styles.loader} size="large" color="#ffff" /> 
+          isLoading ? <ActivityIndicator style={styles.loader} size="large" color="#ffff" /> : null
+        }
+        {
+          errorAuth ? <Text style={styles.txtError}>Error de conexion, intente de nuevo</Text> : null
         }
         <TouchableOpacity style={styles.btnLogin} onPress={handleLogin}>
           <Text style={styles.txtLogin}>Entrar</Text>
@@ -63,6 +68,11 @@ const styles = StyleSheet.create({
   },
   loader: {
     marginBottom: 10
+  },
+  txtError: {
+    color: 'white',
+    marginBottom: 10,
+    alignSelf: 'center'
   },
   btnLogin: {
     borderWidth: 1.5,

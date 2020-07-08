@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import AuthStackNavigator from './src/navigation/authStackNavigator';
 import Login from './src/screens/login';
+import ViewIsLoading from './src/components/layout/viewIsLoading';
 import { getUserDataFromStorage } from './src/redux/actions';
 
 export default function AppContainer() {
@@ -15,10 +16,13 @@ export default function AppContainer() {
   }, [])
 
   return (
-    <NavigationContainer>
-      {
-        token ? <AuthStackNavigator /> : <Login />
-      }
-    </NavigationContainer>
+    isOpening ?
+      <ViewIsLoading />
+    :  
+      <NavigationContainer>
+        {
+          token ? <AuthStackNavigator /> : <Login />
+        }
+      </NavigationContainer>
   );
 }
