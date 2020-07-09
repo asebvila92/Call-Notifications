@@ -10,6 +10,7 @@ export default function MyAvatar(props){
         size={size} 
         rounded 
         title={userData}
+        onPress={() => navigation.navigate('Perfil')}
       />
     )
   }else { 

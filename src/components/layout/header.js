@@ -31,7 +31,12 @@ export default function HeaderApp(props) {
                 null  
           }
           centerComponent={<Text style={styles.headerTitle}>{title}</Text>}
-          rightComponent={<Avatar size='medium' userData={'NV'} navigation={navigation} /> }
+          rightComponent={
+            () => 
+              title !== 'Perfil' ? 
+                <Avatar size='medium' userData={'NV'} navigation={navigation} />  
+              : null
+          }
         />
       </LinearGradient>
     </SafeAreaView>

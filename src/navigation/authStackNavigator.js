@@ -8,6 +8,7 @@ import Home from '../screens/Home';
 import Logs from '../screens/Logs';
 import NewDelivery from '../screens/newDelivery';
 import Deliveries from '../screens/deliveries';
+import Profile from '../screens/profile';
 
 const HomeStack = createStackNavigator();
 function HomeStackScreen() {
@@ -65,8 +66,23 @@ function DeliveriesStackScreen() {
   );
 }
 
+const ProfileStack = createStackNavigator();
+function ProfileStackScreen() {
+  return (
+    <ProfileStack.Navigator
+      headerMode='screen'
+      screenOptions={{
+        header: (props) => <Header navigation={props.scene.descriptor.navigation} title={'Perfil'} />
+      }}
+    >
+      <ProfileStack.Screen name="Perfil" component={Profile} />
+    </ProfileStack.Navigator>
+  );
+}
+
+
 const Tab = createBottomTabNavigator();
-export default function AuthBottomNavigator() {
+function AuthBottomNavigator() {
   //createChannelNotification();
   return (
       <Tab.Navigator
@@ -135,6 +151,26 @@ export default function AuthBottomNavigator() {
         />
       </Tab.Navigator>
   );
+}
+
+const Stack = createStackNavigator();
+export default function AuthStackNavigatior() {
+  return (
+    <Stack.Navigator
+    initialRouteName='Tabs'
+      headerMode="screen"
+    >
+      <Stack.Screen 
+        name='Perfil' 
+        options={{headerShown:false}} 
+        component={ProfileStackScreen} />
+      <Stack.Screen 
+        name='Tabs' 
+        options={{headerShown:false}} 
+        component={AuthBottomNavigator} />
+      
+    </Stack.Navigator>
+  )
 }
 
 const styles = StyleSheet.create({
