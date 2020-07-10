@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Text, Platform } from 'react-native'
+import { useSelector } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-navigation';
 import { Header } from 'react-native-elements';
@@ -9,6 +10,7 @@ import Avatar from '../navigation/avatar';
 
 
 export default function HeaderApp(props) {
+  const userData = useSelector((store) => store.auth.userData);
   const { navigation, title } = props
   
   return(
@@ -34,7 +36,7 @@ export default function HeaderApp(props) {
           rightComponent={
             () => 
               title !== 'Perfil' ? 
-                <Avatar size='medium' userData={'NV'} navigation={navigation} />  
+                <Avatar size='medium' userData={userData} navigation={navigation} />  
               : null
           }
         />

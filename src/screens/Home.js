@@ -48,7 +48,6 @@ export default function Home(props) {
   
   return (
     <View style={styles.container}>
-      <Button title='Log out' onPress={logout}/>
       <Text style={styles.welcome}>
         <Text style={styles.username}>Bienvenido Nelson</Text>, 
         mira las entregas para hoy rapidamente aqui debajo:
