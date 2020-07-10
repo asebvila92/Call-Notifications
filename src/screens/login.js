@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { invokeLogin } from '../redux/actions/auth';
 
 export default function Login(props) {
-  const [username, setUsername] = useState('nelson');
-  const [password, setPassword] = useState('1954');
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
   const isLoading = useSelector((store) => store.auth.isLoading);
   const errorAuth = useSelector((store) => store.auth.errorAuth);
   const dispatch = useDispatch();
