@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { StyleSheet, Text, View, Button, TextInput, ScrollView, Alert } from 'react-native';
+import { StyleSheet, View, TextInput, ScrollView, Alert } from 'react-native';
 import InputWithIcon from '../components/navigation/inputWithIcon';
 import ButtonWithGradient from '../components/navigation/buttonWithGradient';
-import DateTimePicker from '../components/DateTimePicker';
+import DateTimePicker from '../components/navigation/DateTimePicker';
 
 export default function NewDelivery() {
   const [nextDelivery, setNextDelivery] = useState(

@@ -1,14 +1,16 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Text, Platform } from 'react-native'
+import { useSelector } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-navigation';
 import { Header } from 'react-native-elements';
 import { FontAwesome } from '@expo/vector-icons';
 import Constants from 'expo-constants';
-import Avatar from './avatar';
+import Avatar from '../navigation/avatar';
 
 
 export default function HeaderApp(props) {
+  const userData = useSelector((store) => store.auth.userData);
   const { navigation, title } = props
   
   return(
@@ -31,7 +33,12 @@ export default function HeaderApp(props) {
                 null  
           }
           centerComponent={<Text style={styles.headerTitle}>{title}</Text>}
-          rightComponent={<Avatar size='medium' userData={'NV'} navigation={navigation} /> }
+          rightComponent={
+            () => 
+              title !== 'Perfil' ? 
+                <Avatar size='medium' userData={userData} navigation={navigation} />  
+              : null
+          }
         />
       </LinearGradient>
     </SafeAreaView>

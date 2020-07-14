@@ -1,19 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, ActivityIndicator, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, Text, View, Button, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native';
 import { Row, Rows, Table } from 'react-native-table-component';
+import { useSelector, useDispatch } from 'react-redux';
+import { invokeGetDeliveries } from '../redux/actions'
 import { formatDate } from '../helpers/dateHelpers';
 
 export default function Deliveries() {
-  const [logs, setLogs] = useState([]);
-  const [isLoading, setIsLoading] = useState(false)
+  const userToken = useSelector(store => store.auth.token);
+  const deliveries = useSelector(store => store.deliveries.deliveries);
+  const isLoading = useSelector(store => store.deliveries.isLoading)
   const tableHead = ["cliente", "proxima entrega", "ultima entrega", "articulo"];
+  
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    invokeGetDeliveries(dispatch, userToken)
+  }, [])
 
   function createTable() {
-    const arrayLogs = logs.map((log, key) => {
-      const nextDelivery = new Date(log.nextDelivery.seconds * 1000)
-      const lastDelivery = new Date(log.lastDelivery.seconds * 1000)
+    const deliveriesTable = deliveries.map((log, key) => {
+      const nextDelivery = new Date(log.nextDelivery._seconds * 1000)
+      const lastDelivery = new Date(log.lastDelivery._seconds * 1000)
       return [
-        <TouchableOpacity style={styles.button} onPress={() => handleDeleteNotification(log.id, log.notificationId, log.client)}>
+        <TouchableOpacity style={styles.button}>
           <Text>{log.client}</Text>
         </TouchableOpacity>,
         formatDate(nextDelivery),
@@ -22,7 +31,7 @@ export default function Deliveries() {
       ]
     })
 
-    return arrayLogs
+    return deliveriesTable
   }
 
   function refreshLogs(){
@@ -36,19 +45,16 @@ export default function Deliveries() {
       {
         isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : null
       }
-      {logs ?
-        <View style={styles.logView}>
-          <Table>
-            <Row data={tableHead} style={styles.head} textStyle={styles.text} />
+      <View style={styles.logView}>
+        <Table>
+          <Row data={tableHead} style={styles.head} textStyle={styles.text} />
+        </Table>
+        <ScrollView>
+          <Table borderStyle={{ /*borderWidth: 2,*/ borderColor: 'transparent' }}>
+            <Rows data={createTable()} textStyle={styles.text} />
           </Table>
-          <ScrollView>
-            <Table borderStyle={{ /*borderWidth: 2,*/ borderColor: 'transparent' }}>
-              <Rows data={createTable()} textStyle={styles.text} />
-            </Table>
-          </ScrollView>
-        </View>
-        : null
-      }
+        </ScrollView>
+      </View>
     </View>
   );
 }

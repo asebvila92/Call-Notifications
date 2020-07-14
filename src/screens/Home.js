@@ -5,6 +5,7 @@ import { ListItem, Divider } from 'react-native-elements';
 
 export default function Home(props) {
   const { navigation } = props;
+
   //mook list
   const list = [
     {
@@ -38,7 +39,6 @@ export default function Home(props) {
       lastDelivery: '26-04-2020'
     },
   ]
-  
   
   return (
     <View style={styles.container}>

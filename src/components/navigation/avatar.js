@@ -3,21 +3,28 @@ import { Avatar } from 'react-native-elements'
 
 export default function MyAvatar(props){
   const { size, userData, navigation } = props
+
+  function getLastLetters(){
+    return userData.name[0] + userData.lastname[0]
+  }
+
   if(navigation){
     return (
       <Avatar
         containerStyle={{backgroundColor: '#a9a9a9'}}
         size={size} 
         rounded 
-        title={userData}
+        title={getLastLetters()}
+        onPress={() => navigation.navigate('Perfil')}
       />
     )
   }else { 
     return (
-      <Avatar 
+      <Avatar
+        containerStyle={{backgroundColor: '#a9a9a9'}} 
         size={size} 
         rounded 
-        title={userData}
+        title={getLastLetters()}
       />
     )
   }
