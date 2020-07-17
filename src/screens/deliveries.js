@@ -8,7 +8,7 @@ import ViewIsLoading from '../components/layout/viewIsLoading';
 import { invokeGetDeliveries } from '../redux/actions'
 import { formatDate } from '../helpers/dateHelpers';
 
-export default function Deliveries() {
+export default function Deliveries(props) {
   const [search, setSearch] = useState('');
   const userToken = useSelector(store => store.auth.token);
   const deliveries = useSelector(store => store.deliveries.deliveries);
@@ -20,16 +20,28 @@ export default function Deliveries() {
     invokeGetDeliveries(dispatch, userToken)
   }, [])
 
+  function viewDetails(detailsDelivery) {
+    props.navigation.navigate('Detalles', {
+      detailsDelivery: detailsDelivery
+    })
+  }
+
   function createTable() {
     const deliveriesTable = deliveries.map((log) => {
-      const nextDelivery = new Date(log.nextDelivery._seconds * 1000)
-      const lastDelivery = new Date(log.lastDelivery._seconds * 1000)
-      return [
+      const nextDelivery = new Date(log.nextDelivery._seconds * 1000);
+      const lastDelivery = new Date(log.lastDelivery._seconds * 1000);
+      const row = [
         <Text style={styles.cellClient} numberOfLines={1}>{log.client}</Text>,
         <Text style={styles.cell} numberOfLines={1}>{formatDate(nextDelivery)}</Text>,
         <Text style={styles.cell} numberOfLines={1}>{formatDate(lastDelivery)}</Text>,
         <Text style={styles.cell} numberOfLines={1}>{log.article}</Text>
       ]
+      let delivery = {};
+      delivery.row = row;
+      delivery.data = log;
+      return(
+        delivery
+      )
     })
     return deliveriesTable
   }
@@ -65,8 +77,8 @@ export default function Deliveries() {
             >
               <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
                 {
-                  createTable().map((row, key) => (
-                    <Row key={key} data={row} flexArr={[2,1.25,1.25,2]} onRowPress={() => console.warn('open details')} />
+                  createTable().map((delivery, key) => (
+                    <Row key={key} data={delivery.row} flexArr={[2,1.25,1.25,2]} onRowPress={() => viewDetails(delivery.data)} />
                     ))
                 }
               </Table>

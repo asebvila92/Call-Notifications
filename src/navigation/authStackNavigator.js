@@ -9,6 +9,7 @@ import Logs from '../screens/Logs';
 import NewDelivery from '../screens/newDelivery';
 import Deliveries from '../screens/deliveries';
 import Profile from '../screens/profile';
+import DetailsDelivery from '../screens/detailsDelivery';
 
 const HomeStack = createStackNavigator();
 function HomeStackScreen() {
@@ -65,21 +66,6 @@ function DeliveriesStackScreen() {
     </DeliveriesStack.Navigator>
   );
 }
-
-const ProfileStack = createStackNavigator();
-function ProfileStackScreen() {
-  return (
-    <ProfileStack.Navigator
-      headerMode='screen'
-      screenOptions={{
-        header: (props) => <Header navigation={props.scene.descriptor.navigation} title={'Perfil'} />
-      }}
-    >
-      <ProfileStack.Screen name="Perfil" component={Profile} />
-    </ProfileStack.Navigator>
-  );
-}
-
 
 const Tab = createBottomTabNavigator();
 function AuthBottomNavigator() {
@@ -161,14 +147,22 @@ export default function AuthStackNavigatior() {
       headerMode="screen"
     >
       <Stack.Screen 
-        name='Perfil' 
-        options={{headerShown:false}} 
-        component={ProfileStackScreen} />
-      <Stack.Screen 
         name='Tabs' 
         options={{headerShown:false}} 
         component={AuthBottomNavigator} />
-      
+      <Stack.Screen 
+        name="Perfil" 
+        component={Profile} 
+        options={{
+          header: (props) => <Header navigation={props.scene.descriptor.navigation} title='Perfil' />
+        }}/>  
+      <Stack.Screen 
+        name="Detalles" 
+        component={DetailsDelivery} 
+        options={{
+          //props have the props that you pass to the screen when you navigate to it
+          header: (props) => <Header navigation={props.scene.descriptor.navigation} title='Detalles de Entrega' />
+        }}/>   
     </Stack.Navigator>
   )
 }
