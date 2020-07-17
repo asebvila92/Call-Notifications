@@ -51,20 +51,20 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
     paddingRight: 20,
     paddingBottom: 30,
-    borderBottomColor: '#96E4FF'
+    borderBottomColor: '#1cacdc'
   },
   headerStylesIos: {
     height: 80,
     paddingLeft: 0,
     paddingRight: 20,
-    borderBottomColor: '#96E4FF'
+    borderBottomColor: '#1cacdc'
   },
   touchBack: {
     paddingHorizontal: 20,
   },
   headerTitle: {
     color: 'white',
-    fontSize: 17,
+    fontSize: 20,
     fontWeight: '600'
   }
 })
