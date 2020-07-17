@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, RefreshControl } from 'react-native';
+import { SearchBar } from 'react-native-elements';
 import { Row, Table } from 'react-native-table-component';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,6 +9,7 @@ import { invokeGetDeliveries } from '../redux/actions'
 import { formatDate } from '../helpers/dateHelpers';
 
 export default function Deliveries() {
+  const [search, setSearch] = useState('');
   const userToken = useSelector(store => store.auth.token);
   const deliveries = useSelector(store => store.deliveries.deliveries);
   const isLoading = useSelector(store => store.deliveries.isLoading)
@@ -39,6 +41,13 @@ export default function Deliveries() {
   return (
     <View style={styles.container}>
       <View style={styles.logView} >
+      <SearchBar 
+        platform='ios' 
+        placeholder="Buscar..."
+        round={true}
+        value={search}
+        onChangeText={(text) => setSearch(text)} 
+      />
         <LinearGradient style={styles.headRow} colors={['#2b8ff3', '#1cacdc']}> 
           <Table>
             <Row opacityPress={1} flexArr={[2,1.25,1.25,2]} data={tableHead} textStyle={styles.headText} />
@@ -79,11 +88,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   logView: {
-    marginBottom: 98
+    marginBottom: 132,
   },
   headRow: {
     height: 55,
-    marginTop: 40,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },

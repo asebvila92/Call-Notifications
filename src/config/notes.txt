@@ -7,3 +7,16 @@ yellow: #ffcc4d
 
 blue: ['#1885f2', '#2b8ff3', '#1cacdc']
 
+  function createMockLogsToTable(){
+    let array = []
+    for(let i = 0 ; i < 25 ; i++){
+      array.push({
+        client: 'name client',
+        nextDelivery: 'some',
+        lastDelivery: 'date',
+        article: 'article'
+      })
+    }
+    return array
+  }
+
