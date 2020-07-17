@@ -3,5 +3,5 @@ export function changeHourOfDate(date) {
   return newDate;
 }
 export function formatDate(value) {
-  return value.getDate() + "/" + (value.getMonth() + 1) + "/" + (value.getYear() + 1900);
+  return value.getDate() + "/" + (value.getMonth() + 1) + "/" + (value.getYear() - 100);
 }
