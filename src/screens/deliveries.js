@@ -12,29 +12,14 @@ export default function Deliveries() {
   const deliveries = useSelector(store => store.deliveries.deliveries);
   const isLoading = useSelector(store => store.deliveries.isLoading)
   const tableHead = ["Cliente", "Proxima entrega", "Ultima entrega", "Articulo"];
-  
   const dispatch = useDispatch();
 
   useEffect(() => {
     invokeGetDeliveries(dispatch, userToken)
   }, [])
 
-  function createlogs() {
-    let arrayLogs = [];
-    for(let i = 0 ; i < 50 ; i++){
-      arrayLogs.push({
-        client: "alguiennnnnnnnnn",
-        nextDelivery: "19/07/20",
-        lastDelivery: "19/07/20",
-        article: "Nutra nuggets verde 15kg"
-      })
-    }
-    return arrayLogs;
-  }
-
   function createTable() {
-    //const arrayLogs = createlogs();
-    const deliveriesTable = deliveries.map((log, key) => {
+    const deliveriesTable = deliveries.map((log) => {
       const nextDelivery = new Date(log.nextDelivery._seconds * 1000)
       const lastDelivery = new Date(log.lastDelivery._seconds * 1000)
       return [
@@ -44,7 +29,6 @@ export default function Deliveries() {
         <Text style={styles.cell} numberOfLines={1}>{log.article}</Text>
       ]
     })
-
     return deliveriesTable
   }
 
@@ -57,7 +41,7 @@ export default function Deliveries() {
       <View style={styles.logView} >
         <LinearGradient style={styles.headRow} colors={['#2b8ff3', '#1cacdc']}> 
           <Table>
-            <Row opacityPress={1} data={tableHead} textStyle={styles.headText} />
+            <Row opacityPress={1} flexArr={[2,1.25,1.25,2]} data={tableHead} textStyle={styles.headText} />
           </Table>
         </LinearGradient>
         {
@@ -73,7 +57,7 @@ export default function Deliveries() {
               <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
                 {
                   createTable().map((row, key) => (
-                    <Row key={key} data={row} onRowPress={() => console.warn('eeee')} />
+                    <Row key={key} data={row} flexArr={[2,1.25,1.25,2]} onRowPress={() => console.warn('open details')} />
                     ))
                 }
               </Table>
