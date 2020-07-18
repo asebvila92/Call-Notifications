@@ -24,7 +24,8 @@ export default function InputWithLabel(props) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    marginBottom: 10
+    marginBottom: 10,
+    marginHorizontal: 10
   },
   label:{
     fontSize: 14,

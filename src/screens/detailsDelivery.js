@@ -49,7 +49,7 @@ export default function DetailsDelivery(props) {
             fontSize={18}
           />
         </View>
-        <ButtonWithGradient text='Guardar Cambios' colorBegin='#1885f2' colorEnd='#1cacdc' />
+        <ButtonWithGradient text='Guardar Cambios' colorBegin='#1885f2' colorEnd='#1cacdc' disabled={true} />
         <Text style={styles.savedBy}>{`Ultima modificacion: ${detailsDelivery.savedBy}`}</Text>
       </View>
       <ButtonWithGradient text='Borrar' colorBegin='#e73827' colorEnd='#fc6e5b' /> 
@@ -79,15 +79,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: '#1885f2',
     marginTop: 10,
-    paddingHorizontal: 10
-  },
-  touchEdit: {
-    paddingTop: 10,
-    paddingLeft: 10,
-    alignItems: 'center' 
+    paddingHorizontal: 5
   },
   dataDelivery: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 5,
     paddingTop: 10,
     paddingBottom: 0
   },

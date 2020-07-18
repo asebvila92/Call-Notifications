@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#efefef',
     borderRadius: 5,
     marginBottom: 15,
+    marginHorizontal: 10
   },
   legendContent: {
     flexDirection: 'row',
