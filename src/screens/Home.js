@@ -1,10 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { useSelector } from 'react-redux';
 import WidgetDashboard from '../components/navigation/widgetDashboard';
 import { ListItem, Divider } from 'react-native-elements';
 
 export default function Home(props) {
   const { navigation } = props;
+  const userData = useSelector(store => store.auth.userData);
 
   //mook list
   const list = [
@@ -43,7 +45,7 @@ export default function Home(props) {
   return (
     <View style={styles.container}>
       <Text style={styles.welcome}>
-        <Text style={styles.username}>Bienvenido Nelson</Text>, 
+        <Text style={styles.username}>{'Bienvenido '+ userData.name}</Text>, 
         mira las entregas para hoy rapidamente aqui debajo:
       </Text>
       <View style={styles.content}>

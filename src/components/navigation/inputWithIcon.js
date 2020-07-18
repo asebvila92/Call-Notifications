@@ -30,10 +30,12 @@ export default function InputWithIcon(props) {
 
 const styles = StyleSheet.create({
   container: {
+    flex:1,
     paddingHorizontal: 10,
     marginBottom: 15,
     backgroundColor: '#efefef',
-    borderRadius: 5
+    borderRadius: 5,
+    marginHorizontal: 10
   },
   content: {
     paddingVertical: 10,
@@ -41,6 +43,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
+    color: '#4d4f5c',
     fontSize: 18,
   },
   icon: {

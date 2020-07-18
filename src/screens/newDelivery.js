@@ -3,6 +3,7 @@ import { StyleSheet, View, TextInput, ScrollView, Alert } from 'react-native';
 import InputWithIcon from '../components/navigation/inputWithIcon';
 import ButtonWithGradient from '../components/navigation/buttonWithGradient';
 import DateTimePicker from '../components/navigation/DateTimePicker';
+import TextArea from '../components/navigation/textArea';
 
 export default function NewDelivery() {
   const [nextDelivery, setNextDelivery] = useState(
@@ -47,23 +48,25 @@ export default function NewDelivery() {
       <View style={styles.content}>
         <InputWithIcon value={client} onChangeValue={setClient} placeholder='Cliente' iconType='font-awesome' iconName='user' color='#1885f2' reference={inputClient} />
         <InputWithIcon value={article} onChangeValue={setArticle} placeholder='Articulo' iconType='font-awesome' iconName='shopping-cart' color='#1885f2'/>
-        <DateTimePicker legend='Proxima entrega' iconColor='red' date={nextDelivery} onSelectedDate={setNextDelivery} />
-        <DateTimePicker legend='Ultima entrega' iconColor='green' date={lastDelivery} onSelectedDate={setLastDelivery} />
-        <InputWithIcon value={price} onChangeValue={setPrice} placeholder='Precio' type='numeric' iconType='font-awesome' iconName='money' color='#1885f2'/>
+        <View style={styles.vwInRow}>
+          <DateTimePicker legend='Proxima entrega' iconColor='red' date={nextDelivery} onSelectedDate={setNextDelivery} />
+          <DateTimePicker legend='Ultima entrega' iconColor='green' date={lastDelivery} onSelectedDate={setLastDelivery} />
+        </View>
+        <View style={styles.vwInRow}>
+          <InputWithIcon value={price} onChangeValue={setPrice} placeholder='Precio' type='numeric' iconType='font-awesome' iconName='money' color='#1885f2'/>
+          <InputWithIcon value={phone} onChangeValue={setPhone} placeholder='Telefono' type='phone-pad' iconType='font-awesome' iconName='phone' color='#1885f2'/>
+        </View>
         <InputWithIcon value={address} onChangeValue={setAddress} placeholder='Direccion' iconType='fontisto' iconName='home' color='#1885f2'/>
-        <InputWithIcon value={phone} onChangeValue={setPhone} placeholder='Telefono' type='phone-pad' iconType='font-awesome' iconName='phone' color='#1885f2'/>
         <View style={styles.vwTextArea}>
-          <TextInput
+        <TextArea 
             value={observations}
-            onChangeText={setObservations} 
-            style={styles.textArea}
-            placeholder="Observaciones"
-            placeholderTextColor="#1885f2"
-            numberOfLines={2} 
-            multiline={true} 
+            onChangeValue={setObservations}
+            title='Observaciones'
+            titleColor='#1885f2'
+            fontSize={18}
           />
         </View>
-        <ButtonWithGradient text='GUARDAR' onPressbtn={saveDelivery} /> 
+        <ButtonWithGradient text='GUARDAR' colorBegin='#1885f2' colorEnd='#1cacdc' onPressbtn={saveDelivery} /> 
       </View>
     </ScrollView>
   );
@@ -76,12 +79,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   content: {
-    padding: 20,
+    paddingTop: 20,
+    padding: 5,
     flex: 1,
   },
   title: {
     fontSize: 20,
     marginBottom: 20,
+  },
+  vwInRow:{
+    flexDirection: 'row',
+    justifyContent: "space-between"
   },
   textArea: {
     fontSize: 18,
