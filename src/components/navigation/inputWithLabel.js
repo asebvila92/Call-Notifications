@@ -4,8 +4,8 @@ import { Divider } from 'react-native-elements';
 
 
 export default function InputWithLabel(props) {
-  const { label, type, value, onChangeValue } = props
-  
+  const { label, type, value, onChangeValue, editable } = props
+ 
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
@@ -13,7 +13,7 @@ export default function InputWithLabel(props) {
         style={styles.field} 
         keyboardType={type === 'date' ? 'default' : type} 
         value={value}
-        editable={type === 'date' ? false : true} 
+        editable={type === 'date' ? false : editable} 
         onChangeText={(text) => onChangeValue(text)} 
       />
       <Divider />

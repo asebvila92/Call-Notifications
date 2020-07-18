@@ -5,7 +5,7 @@ import InputWithLabel from './inputWithLabel';
 import { formatDate } from '../../helpers/dateHelpers'; 
 
 export default function EditDateTimePicker(props) {
-  const { label, date, onSelectedDate } = props
+  const { label, date, onSelectedDate, editable } = props
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {
@@ -22,7 +22,7 @@ export default function EditDateTimePicker(props) {
   };
 
   return (
-    <TouchableOpacity onPress={showDatePicker}>
+    <TouchableOpacity disabled={!editable} onPress={showDatePicker}>
       <InputWithLabel label={label} type='date' value={formatDate(date)} />
       <DateTimePickerModal
         isVisible={isDatePickerVisible}

@@ -28,18 +28,19 @@ export default function DetailsDelivery(props) {
         </View>
         <Text style={styles.txtClient}>{client}</Text>
         <View style={styles.dataDelivery}>
-          <InputWithLabel label='Cliente' value={client} onChangeValue={setClient} />
-          <InputWithLabel label='Articulo' value={article} onChangeValue={setArticle} />
+          <InputWithLabel label='Cliente' editable={false} value={client} onChangeValue={setClient} />
+          <InputWithLabel label='Articulo' editable={false} value={article} onChangeValue={setArticle} />
           <View style={styles.vwInRow}>
-            <EditDateTimePicker label='Proxima Entrega' date={nextDelivery} onSelectedDate={setNextDelivery}  />
-            <EditDateTimePicker label='Ultima Entrega' date={lastDelivery} onSelectedDate={setLastDelivery}  />
+            <EditDateTimePicker label='Proxima Entrega' editable={false} date={nextDelivery} onSelectedDate={setNextDelivery}  />
+            <EditDateTimePicker label='Ultima Entrega' editable={false} date={lastDelivery} onSelectedDate={setLastDelivery}  />
           </View>
           <View style={styles.vwInRow}>
-            <InputWithLabel label='Precio' type='numeric' value={price.toString()} onChangeValue={setPrice} />
-            <InputWithLabel label='Telefono' type='phone-pad' value={phone} onChangeValue={setPhone} />
+            <InputWithLabel label='Precio' editable={false} type='numeric' value={price.toString()} onChangeValue={setPrice} />
+            <InputWithLabel label='Telefono' editable={false} type='phone-pad' value={phone} onChangeValue={setPhone} />
           </View>
-          <InputWithLabel label='Direccion' value={address} onChangeValue={setAddress} />
-          <TextArea 
+          <InputWithLabel label='Direccion' editable={false} value={address} onChangeValue={setAddress} />
+          <TextArea
+            editable={false}
             value={observations}
             onChangeValue={setObservations}
             title='Observaciones'
