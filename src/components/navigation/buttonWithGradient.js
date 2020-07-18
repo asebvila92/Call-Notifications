@@ -3,15 +3,15 @@ import { StyleSheet } from 'react-native';
 import GradientButton from 'react-native-gradient-buttons';
 
 export default function ButtonWithGradient(props) {
-  const { text, onPressbtn } = props
+  const { text, onPressbtn, colorBegin, colorEnd } = props
   return (
     <GradientButton
       style={styles.content}
       text={text}
       //disabled={}
       textStyle={styles.txtButton}
-      gradientBegin='#1885f2'
-      gradientEnd='#1cacdc'
+      gradientBegin={colorBegin}
+      gradientEnd={colorEnd}
       gradientDirecction='horizontal'
       radius={23}
       onPressAction={onPressbtn}/>
@@ -22,7 +22,7 @@ export default function ButtonWithGradient(props) {
 const styles = StyleSheet.create({
   content: {
     maxHeight: 45,
-    marginTop: 20
+    marginTop: 10
   },
   txtButton: {
     color: 'white',

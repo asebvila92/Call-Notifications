@@ -48,10 +48,10 @@ export default function DetailsDelivery(props) {
             fontSize={18}
           />
         </View>
-        <ButtonWithGradient text='Guardar Cambios' />
+        <ButtonWithGradient text='Guardar Cambios' colorBegin='#1885f2' colorEnd='#1cacdc' />
         <Text style={styles.savedBy}>{`Ultima modificacion: ${detailsDelivery.savedBy}`}</Text>
       </View>
-      <ButtonWithGradient text='Borrar' /> 
+      <ButtonWithGradient text='Borrar' colorBegin='#e73827' colorEnd='#fc6e5b' /> 
     </ScrollView>
   );
 }

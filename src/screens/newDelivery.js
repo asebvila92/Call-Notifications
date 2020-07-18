@@ -62,7 +62,7 @@ export default function NewDelivery() {
             fontSize={18}
           />
         </View>
-        <ButtonWithGradient text='GUARDAR' onPressbtn={saveDelivery} /> 
+        <ButtonWithGradient text='GUARDAR' colorBegin='#1885f2' colorEnd='#1cacdc' onPressbtn={saveDelivery} /> 
       </View>
     </ScrollView>
   );
