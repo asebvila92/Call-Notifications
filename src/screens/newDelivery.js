@@ -3,6 +3,7 @@ import { StyleSheet, View, TextInput, ScrollView, Alert } from 'react-native';
 import InputWithIcon from '../components/navigation/inputWithIcon';
 import ButtonWithGradient from '../components/navigation/buttonWithGradient';
 import DateTimePicker from '../components/navigation/DateTimePicker';
+import TextArea from '../components/navigation/textArea';
 
 export default function NewDelivery() {
   const [nextDelivery, setNextDelivery] = useState(
@@ -53,14 +54,12 @@ export default function NewDelivery() {
         <InputWithIcon value={address} onChangeValue={setAddress} placeholder='Direccion' iconType='fontisto' iconName='home' color='#1885f2'/>
         <InputWithIcon value={phone} onChangeValue={setPhone} placeholder='Telefono' type='phone-pad' iconType='font-awesome' iconName='phone' color='#1885f2'/>
         <View style={styles.vwTextArea}>
-          <TextInput
+        <TextArea 
             value={observations}
-            onChangeText={setObservations} 
-            style={styles.textArea}
-            placeholder="Observaciones"
-            placeholderTextColor="#1885f2"
-            numberOfLines={2} 
-            multiline={true} 
+            onChangeValue={setObservations}
+            title='Observaciones'
+            titleColor='#1885f2'
+            fontSize={18}
           />
         </View>
         <ButtonWithGradient text='GUARDAR' onPressbtn={saveDelivery} /> 

@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
+    color: '#4d4f5c',
     fontSize: 18,
   },
   icon: {

@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   cell: {
+    color: '#4d4f5c',
     marginHorizontal: 3,
     marginVertical: 3
   },

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {formatDate} from '../../helpers/dateHelpers';
+import { formatDate } from '../../helpers/dateHelpers';
 
 export default function DateTimePicker(props) {
   const { legend, iconColor, date, onSelectedDate } = props
@@ -35,7 +35,7 @@ export default function DateTimePicker(props) {
               />
             <Text style={styles.legend}>{legend}</Text>
           </View>
-          <View style={styles.dateContent} onPress={showDatePicker}>
+          <View style={styles.dateContent} >
             <Text style={styles.txtDate}>{formatDate(date)}</Text>
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
   },
   txtDate: {
     fontSize: 16,
+    color: '#4d4f5c',
     marginBottom: 5,
   },
   icon: {
