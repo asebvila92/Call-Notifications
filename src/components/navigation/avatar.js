@@ -11,7 +11,7 @@ export default function MyAvatar(props){
   if(navigation){
     return (
       <Avatar
-        containerStyle={{backgroundColor: '#a9a9a9'}}
+        containerStyle={{backgroundColor: '#ffb600'}}
         size={size} 
         rounded 
         title={getLastLetters()}
@@ -21,7 +21,7 @@ export default function MyAvatar(props){
   }else { 
     return (
       <Avatar
-        containerStyle={{backgroundColor: '#a9a9a9'}} 
+        containerStyle={{backgroundColor: '#ffb600'}} 
         size={size} 
         rounded 
         title={getLastLetters()}

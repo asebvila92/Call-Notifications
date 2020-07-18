@@ -3,7 +3,6 @@ import { StyleSheet, View, Text } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import ButtonWithGradient from '../components/navigation/buttonWithGradient';
 import Avatar from '../components/navigation/avatar';
-import CustomText from '../components/navigation/customText';
 import { invokeLogout } from '../redux/actions';
 
 export default function Profile() {
@@ -19,15 +18,20 @@ export default function Profile() {
       <View style={styles.content}>
         <View style={styles.vwAvatar}>
           <Avatar userData={userData} size='xlarge' />
+          <Text style={styles.txtName}>{userData.name + ' ' + userData.lastname}</Text>
         </View>
         <View style={styles.vwUserData}>
-          <Text style={styles.txtTitle}>Informacion Personal</Text>
-          <CustomText label='Nombre' value={userData.name + ' ' + userData.lastname} />
-          <CustomText label='Usuario' value={userData.username} />
-          <CustomText label='Dispositivo' value={userData.deviceId} />
+          <Text style={styles.fieldUser}>
+            <Text style={styles.label}>Dispositivo: </Text>  
+            {userData.deviceId}
+          </Text>
+          <Text style={styles.fieldUser}>
+            <Text style={styles.label}>Usuario: </Text>  
+            {userData.username}
+          </Text>
         </View>
         
-        <ButtonWithGradient text='Cerrar Sesion' onPressbtn={logout} /> 
+        <ButtonWithGradient colorBegin='#1885f2' colorEnd='#1cacdc' text='Cerrar Sesion' onPressbtn={logout} /> 
       </View>
     </View>
   );
@@ -47,19 +51,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20
   },
+  txtName: {
+    fontSize: 32,
+    letterSpacing: 1
+  },
+  label: {
+    fontSize: 14,
+    color: '#9a9a9a',
+  },
+  fieldUser: {
+    fontSize: 17,
+    color: '#4d4f5c',
+  },
   vwUserData: {
     backgroundColor: 'white',
     borderRadius: 10,
     paddingHorizontal: 30,
     paddingTop: 20,
     paddingBottom: 30
-  },
-  txtTitle: {
-    fontSize: 19,
-    fontWeight: '700',
-    alignSelf: 'center',
-    color: '#1885f2',
-    marginVertical: 5,
-    marginBottom: 10
-  },
+  }
 });
