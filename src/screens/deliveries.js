@@ -75,7 +75,7 @@ export default function Deliveries(props) {
               onRefresh={handleRefresh} 
               />}
             >
-              <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+              <Table style={{minHeight:30}} borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
                 {
                   createTable().map((delivery, key) => (
                     <Row key={key} data={delivery.row} flexArr={[2,1.25,1.25,2]} onRowPress={() => viewDetails(delivery.data)} />

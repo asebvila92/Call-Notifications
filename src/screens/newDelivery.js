@@ -1,24 +1,20 @@
-import React, { useState, useRef } from 'react';
-import { StyleSheet, View, TextInput, ScrollView, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, ScrollView, Text, ActivityIndicator } from 'react-native';
+import { Icon } from 'react-native-elements';
+import { useSelector, useDispatch } from 'react-redux';
 import InputWithIcon from '../components/navigation/inputWithIcon';
 import ButtonWithGradient from '../components/navigation/buttonWithGradient';
 import DateTimePicker from '../components/navigation/DateTimePicker';
 import TextArea from '../components/navigation/textArea';
+import { invokeAddDelivery } from '../redux/actions';
+import { CLEAN_LAST_ADDED } from '../redux/constants'; 
 
-export default function NewDelivery() {
+export default function NewDelivery(props) {
   const [nextDelivery, setNextDelivery] = useState(
-    new Date(
-      new Date().getYear() + 1900,
-      new Date().getMonth() + 1,
-      new Date().getDate(),
-    ),
+    new Date(new Date().getYear() + 1900, new Date().getMonth() + 1, new Date().getDate(),)
   );
   const [lastDelivery, setLastDelivery] = useState(
-    new Date(
-      new Date().getYear() + 1900,
-      new Date().getMonth(),
-      new Date().getDate(),
-    ),
+    new Date(new Date().getYear() + 1900, new Date().getMonth(), new Date().getDate(),)
   );
   const [client, setClient] = useState('');
   const [article, setArticle] = useState('');
@@ -26,11 +22,69 @@ export default function NewDelivery() {
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
   const [observations, setObservations] = useState('');
-  const inputClient = useRef(null);
+  const [messageInfo, setMessageInfo] = useState(['','']);
+  const userData = useSelector(store => store.auth.userData);
+  const userToken = useSelector(store => store.auth.token);
+  const isLoading = useSelector(store => store.deliveries.isLoading);
+  const errorAdd = useSelector(store => store.deliveries.errorAddDelivery);
+  const lastAdded = useSelector(store => store.deliveries.lastAdded);
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    if(errorAdd){
+      setMessageInfo(['errAdd', 'Ocurrio un error, intente nuevamente'])
+    }else if(lastAdded !== ''){
+      setMessageInfo(['success', 'Entrega agregada exitosamente'])
+    }
+  },[errorAdd, lastAdded])
+
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('blur', () => {
+      // Screen was left
+      setMessageInfo(['',''])
+      dispatch({type: CLEAN_LAST_ADDED})
+    });
+    return unsubscribe;
+  },[])
 
   function saveDelivery() {
-    Alert.alert('',`${client}\n${article}\n${price}\nproxima: ${nextDelivery}\nultima: ${lastDelivery}\n${address}\n${phone}\n${observations}`);
-    //resetInputs();
+    const newDelivery = {
+      client: client,
+      article: article,
+      lastDelivery: lastDelivery,
+      nextDelivery: nextDelivery,
+      cellphone: phone,
+      price: price,
+      address: address,
+      observations: observations,
+      user: userData.username
+    }
+    if(client !== '' && client.replace(/ /g, '') !== ''){
+      if(nextDelivery > lastDelivery){
+        invokeAddDelivery(dispatch, userToken, newDelivery);
+        setMessageInfo(['','']);
+        resetInputs();
+      }else{
+        setMessageInfo(['dates', 'Proxima entrega debe ser posterior a ultima entrega']);
+      }
+    }else{
+      setMessageInfo(['client', 'Campo cliente es requerido']);
+    }
+  }
+
+  function showMessage(isError){
+    const color = isError ? 'red' : 'green'
+    return (
+      <View style={styles.vwMsg}>
+        <Icon
+          name={isError ? 'circle-with-cross' : 'check-circle'}
+          size={16}
+          type={isError ? 'entypo' : 'font-awesome'}
+          color={color}
+        />
+        <Text style={{...styles.txtMsg, color: color}}>{messageInfo[1]}</Text>
+      </View>
+    )
   }
 
   function resetInputs() {
@@ -40,17 +94,18 @@ export default function NewDelivery() {
     setAddress('')
     setPhone('')
     setObservations('')
-    inputClient.current.focus();
   }
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.content}>
-        <InputWithIcon value={client} onChangeValue={setClient} placeholder='Cliente' iconType='font-awesome' iconName='user' color='#1885f2' reference={inputClient} />
+        {messageInfo[0] === 'client' ? showMessage(true) : null}
+        <InputWithIcon value={client} onChangeValue={setClient} placeholder='Cliente' iconType='font-awesome' iconName='user' color='#1885f2' />
         <InputWithIcon value={article} onChangeValue={setArticle} placeholder='Articulo' iconType='font-awesome' iconName='shopping-cart' color='#1885f2'/>
+        {messageInfo[0] === 'dates' ? showMessage(true) : null}
         <View style={styles.vwInRow}>
-          <DateTimePicker legend='Proxima entrega' iconColor='red' date={nextDelivery} onSelectedDate={setNextDelivery} />
           <DateTimePicker legend='Ultima entrega' iconColor='green' date={lastDelivery} onSelectedDate={setLastDelivery} />
+          <DateTimePicker legend='Proxima entrega' iconColor='red' date={nextDelivery} onSelectedDate={setNextDelivery} />
         </View>
         <View style={styles.vwInRow}>
           <InputWithIcon value={price} onChangeValue={setPrice} placeholder='Precio' type='numeric' iconType='font-awesome' iconName='money' color='#1885f2'/>
@@ -66,7 +121,9 @@ export default function NewDelivery() {
             fontSize={18}
           />
         </View>
-        <ButtonWithGradient text='GUARDAR' colorBegin='#1885f2' colorEnd='#1cacdc' onPressbtn={saveDelivery} /> 
+        {isLoading ? <ActivityIndicator size={30} color="#1cacdc" /> : null}
+        {messageInfo[0] === 'errAdd' ? showMessage(true) : messageInfo[0] === 'success' ? showMessage(false) : null}
+        <ButtonWithGradient text='GUARDAR' colorBegin='#1885f2' colorEnd='#1cacdc' disabled={isLoading} onPressbtn={saveDelivery} /> 
       </View>
     </ScrollView>
   );
@@ -91,12 +148,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: "space-between"
   },
-  textArea: {
-    fontSize: 18,
-    textAlignVertical: 'top',
-    backgroundColor: '#efefef',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10
+  vwMsg: {
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    alignSelf: 'center'
   },
+  txtMsg: {
+    color: 'red', 
+    fontSize: 13, 
+    marginLeft: 3
+  }
 });

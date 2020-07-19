@@ -72,7 +72,7 @@ function AuthBottomNavigator() {
   //createChannelNotification();
   return (
       <Tab.Navigator
-        initialRouteName="Home"
+        initialRouteName="Nueva"
         tabBar={props => <BottomTabBar {...props} />}
       >
         <Tab.Screen 

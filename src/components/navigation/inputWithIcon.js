@@ -3,7 +3,7 @@ import { StyleSheet, View, TextInput } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 export default function InputWithIcon(props) {
-  const { placeholder, type, iconName, iconType, color, value, onChangeValue, reference } = props
+  const { placeholder, type, iconName, iconType, color, value, onChangeValue } = props
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -15,7 +15,6 @@ export default function InputWithIcon(props) {
           color={color}
         />
         <TextInput
-          ref={reference || null} 
           style={styles.input}
           value={value}
           onChangeText={onChangeValue} 

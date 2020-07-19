@@ -1,13 +1,15 @@
 import {
-  GET_DELIVERIES_PENDING,
+  DELIVERIES_PENDING,
   GET_DELIVERIES_SUCCESS,
-  GET_DELIVERIES_ERROR
+  GET_DELIVERIES_ERROR,
+  ADD_DELIVERY_SUCCESS,
+  ADD_DELIVERY_ERROR
 } from '../constants';
-import { getAllDeliveries } from '../../api/deliveriesService';
+import { getAllDeliveries, addDelivery } from '../../api/deliveriesService';
 
 export const invokeGetDeliveries = (dispatch, userToken) => {
   dispatch({
-    type: GET_DELIVERIES_PENDING,
+    type: DELIVERIES_PENDING,
   })
   
   getAllDeliveries(userToken).then(
@@ -24,4 +26,27 @@ export const invokeGetDeliveries = (dispatch, userToken) => {
       })
     }
   )
+}
+
+export const invokeAddDelivery = (dispatch, userToken, delivery) => {
+  dispatch({
+    type: DELIVERIES_PENDING,
+  })
+
+  addDelivery(userToken, delivery).then(
+    (response) => {
+      console.log(response.data)
+      dispatch({
+        type: ADD_DELIVERY_SUCCESS,
+        payload: response.data
+      })
+    },
+    (err) => {
+      console.log(err)
+      dispatch({
+        type: ADD_DELIVERY_ERROR,
+        payload: err
+      })
+    }
+  )  
 }

@@ -8,3 +8,11 @@ export const getAllDeliveries = (userToken) => {
     }
   })
 }
+
+export const addDelivery = (userToken, delivery) => {
+  return axios.post(`${API_URL}/deliveries`, delivery, {
+    headers: {
+      Authorization: 'Bearer ' + userToken
+    }
+  })
+}

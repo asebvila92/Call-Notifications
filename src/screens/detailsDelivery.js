@@ -35,7 +35,7 @@ export default function DetailsDelivery(props) {
             <EditDateTimePicker label='Ultima Entrega' editable={false} date={lastDelivery} onSelectedDate={setLastDelivery}  />
           </View>
           <View style={styles.vwInRow}>
-            <InputWithLabel label='Precio' editable={false} type='numeric' value={price.toString()} onChangeValue={setPrice} />
+            <InputWithLabel label='Precio' editable={false} type='numeric' value={price} onChangeValue={setPrice} />
             <InputWithLabel label='Telefono' editable={false} type='phone-pad' value={phone} onChangeValue={setPhone} />
           </View>
           <InputWithLabel label='Direccion' editable={false} value={address} onChangeValue={setAddress} />
