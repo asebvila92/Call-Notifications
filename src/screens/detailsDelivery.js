@@ -1,26 +1,56 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, ScrollView, ActivityIndicator } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { useSelector, useDispatch } from 'react-redux';
 import InputWithLabel from '../components/navigation/inputWithLabel';
 import ButtonWithGradient from '../components/navigation/buttonWithGradient';
 import EditDateTimePicker  from '../components/navigation/editDateTimePicker';
 import TextArea from '../components/navigation/textArea';
-
+import MessageResponse from '../components/navigation/messageResponse';
+import CustomAlert from '../components/navigation/customAlert';
+import { CLEAN_FLAGS } from '../redux/constants';
 
 export default function DetailsDelivery(props) {
   const { detailsDelivery } = props.route.params
+  const [messageInfo, setMessageInfo] = useState(['','']);
   const [client, setClient] = useState(detailsDelivery.client);
   const [article, setArticle] = useState(detailsDelivery.article);
   const [price, setPrice] = useState(detailsDelivery.price);
   const [address, setAddress] = useState(detailsDelivery.address);
   const [phone, setPhone] = useState(detailsDelivery.cellphone);
   const [observations, setObservations] = useState(detailsDelivery.observations);
+  const userToken = useSelector(store => store.auth.token);
+  const wasDeletedDelivery = useSelector(store => store.deliveries.deleted);
+  const errorDeleteDelivery = useSelector(store => store.deliveries.errorDelete);
+  const isLoading = useSelector(store => store.deliveries.isLoading);
+  const dispatch = useDispatch();
 
   const [lastDelivery, setLastDelivery] = useState(
     new Date(detailsDelivery.lastDelivery._seconds * 1000));
   const [nextDelivery, setNextDelivery] = useState(
     new Date(detailsDelivery.nextDelivery._seconds * 1000));
+  
+  useEffect(() => {
+    if(wasDeletedDelivery){
+      setMessageInfo(['',''])
+      props.navigation.navigate('Entregas')
+    }else if(errorDeleteDelivery){
+      setMessageInfo(['errDelete', 'No se pudo eliminar, intenta nuevamente'])
+    }
+  },[wasDeletedDelivery, errorDeleteDelivery])
+  
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('blur', () => {
+      dispatch({type: CLEAN_FLAGS})
+      setMessageInfo(['',''])
+    });
+    return unsubscribe;
+  },[])
 
+  function deleteDelivery(){
+    CustomAlert(dispatch, userToken, detailsDelivery.id)
+  }  
+  
   return (
     <ScrollView style={styles.container}>
       <View style={styles.content}>
@@ -52,7 +82,9 @@ export default function DetailsDelivery(props) {
         <ButtonWithGradient text='Guardar Cambios' colorBegin='#1885f2' colorEnd='#1cacdc' disabled={true} />
         <Text style={styles.savedBy}>{`Ultima modificacion: ${detailsDelivery.savedBy}`}</Text>
       </View>
-      <ButtonWithGradient text='Borrar' colorBegin='#e73827' colorEnd='#fc6e5b' /> 
+      {isLoading ? <ActivityIndicator size={35} color='#e73827'/> : null}
+      {messageInfo[0] === 'errDelete' ? <MessageResponse isError={true} message={messageInfo[1]} /> : null}
+      <ButtonWithGradient text='Borrar' disabled={isLoading} colorBegin='#e73827' colorEnd='#fc6e5b' onPressbtn={deleteDelivery} /> 
     </ScrollView>
   );
 }
@@ -67,6 +99,7 @@ const styles = StyleSheet.create({
   content: {
     backgroundColor: 'white',
     borderRadius: 10,
+    marginBottom: 3
   },
   vwLock: {
     flexDirection: 'row'

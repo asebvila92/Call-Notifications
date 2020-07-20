@@ -16,3 +16,11 @@ export const addDelivery = (userToken, delivery) => {
     }
   })
 }
+
+export const deleteDelivery = (userToken, idDelivery) => {
+  return axios.delete(`${API_URL}/deliveries/${idDelivery}`,{
+    headers: {
+      Authorization: 'Bearer ' + userToken,
+    }
+  })
+}

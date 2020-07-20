@@ -6,8 +6,9 @@ import InputWithIcon from '../components/navigation/inputWithIcon';
 import ButtonWithGradient from '../components/navigation/buttonWithGradient';
 import DateTimePicker from '../components/navigation/DateTimePicker';
 import TextArea from '../components/navigation/textArea';
+import MessageResponse from '../components/navigation/messageResponse';
 import { invokeAddDelivery } from '../redux/actions';
-import { CLEAN_LAST_ADDED } from '../redux/constants'; 
+import { CLEAN_FLAGS } from '../redux/constants'; 
 
 export default function NewDelivery(props) {
   const [nextDelivery, setNextDelivery] = useState(
@@ -42,7 +43,7 @@ export default function NewDelivery(props) {
     const unsubscribe = props.navigation.addListener('blur', () => {
       // Screen was left
       setMessageInfo(['',''])
-      dispatch({type: CLEAN_LAST_ADDED})
+      dispatch({type: CLEAN_FLAGS})
     });
     return unsubscribe;
   },[])
@@ -72,21 +73,6 @@ export default function NewDelivery(props) {
     }
   }
 
-  function showMessage(isError){
-    const color = isError ? 'red' : 'green'
-    return (
-      <View style={styles.vwMsg}>
-        <Icon
-          name={isError ? 'circle-with-cross' : 'check-circle'}
-          size={16}
-          type={isError ? 'entypo' : 'font-awesome'}
-          color={color}
-        />
-        <Text style={{...styles.txtMsg, color: color}}>{messageInfo[1]}</Text>
-      </View>
-    )
-  }
-
   function resetInputs() {
     setArticle('')
     setClient('')
@@ -99,10 +85,10 @@ export default function NewDelivery(props) {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.content}>
-        {messageInfo[0] === 'client' ? showMessage(true) : null}
+        {messageInfo[0] === 'client' ? <MessageResponse isError={true} message={messageInfo[1]}/> : null}
         <InputWithIcon value={client} onChangeValue={setClient} placeholder='Cliente' iconType='font-awesome' iconName='user' color='#1885f2' />
         <InputWithIcon value={article} onChangeValue={setArticle} placeholder='Articulo' iconType='font-awesome' iconName='shopping-cart' color='#1885f2'/>
-        {messageInfo[0] === 'dates' ? showMessage(true) : null}
+        {messageInfo[0] === 'dates' ? <MessageResponse isError={true} message={messageInfo[1]}/> : null}
         <View style={styles.vwInRow}>
           <DateTimePicker legend='Ultima entrega' iconColor='green' date={lastDelivery} onSelectedDate={setLastDelivery} />
           <DateTimePicker legend='Proxima entrega' iconColor='red' date={nextDelivery} onSelectedDate={setNextDelivery} />
@@ -122,7 +108,11 @@ export default function NewDelivery(props) {
           />
         </View>
         {isLoading ? <ActivityIndicator size={30} color="#1cacdc" /> : null}
-        {messageInfo[0] === 'errAdd' ? showMessage(true) : messageInfo[0] === 'success' ? showMessage(false) : null}
+        {messageInfo[0] === 'errAdd' ? 
+          <MessageResponse isError={true} message={messageInfo[1]} /> 
+        : messageInfo[0] === 'success' ? 
+          <MessageResponse isError={false} message={messageInfo[1]} /> 
+        : null}
         <ButtonWithGradient text='GUARDAR' colorBegin='#1885f2' colorEnd='#1cacdc' disabled={isLoading} onPressbtn={saveDelivery} /> 
       </View>
     </ScrollView>
@@ -148,14 +138,4 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: "space-between"
   },
-  vwMsg: {
-    flexDirection: 'row', 
-    alignItems: 'center', 
-    alignSelf: 'center'
-  },
-  txtMsg: {
-    color: 'red', 
-    fontSize: 13, 
-    marginLeft: 3
-  }
 });

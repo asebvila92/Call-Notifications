@@ -1,24 +1,30 @@
 import {
     DELIVERIES_PENDING,
-    CLEAN_LAST_ADDED,
+    CLEAN_FLAGS,
     GET_DELIVERIES_SUCCESS,
     GET_DELIVERIES_ERROR,
     ADD_DELIVERY_SUCCESS,
-    ADD_DELIVERY_ERROR 
+    ADD_DELIVERY_ERROR,
+    DELETE_DELIVERY_SUCCESS,
+    DELETE_DELIVERY_ERROR, 
   } from '../constants';
   
   const initialState = {
     isLoading: false,
     errorGetDeliveries: false,
     errorAddDelivery: false,
-    lastAdded: ''
+    errorDelete: false,
+    lastAdded: '',
+    deleted: false
   }
   const deliveriesReducer = (state = initialState, action) => {
     switch(action.type){
-        case CLEAN_LAST_ADDED:
+        case CLEAN_FLAGS:
           return {
             ...state,
-            lastAdded: ''
+            lastAdded: '',
+            deleted: null,
+            errorDelete: null
           }
         case DELIVERIES_PENDING:
           return {
@@ -26,6 +32,7 @@ import {
             isLoading: true,
             errorGetDeliveries: null,
             errorAddDelivery: null,
+            errorDelete: null,
             lastAdded: ''
           }
         case GET_DELIVERIES_SUCCESS: 
@@ -34,14 +41,12 @@ import {
             isLoading: false,
             errorGetDeliveries: false,
             deliveries: action.payload.data,
-            lastAdded: ''
           }
         case GET_DELIVERIES_ERROR:
           return {
             ...state,
             isLoading: false,
             errorGetDeliveries: true,
-            lastAdded: ''
           }
         case ADD_DELIVERY_SUCCESS:
           return {
@@ -56,7 +61,21 @@ import {
               ...state,
               isLoading: false,
               errorAddDelivery: true,
-              lastAdded: ''
+            }
+          case DELETE_DELIVERY_SUCCESS:
+            return {
+              ...state,
+              isLoading: false,
+              errorDelete: false,
+              deleted: true,
+              deliveries: action.payload.deliveries
+            }
+          case DELETE_DELIVERY_ERROR:
+            return {
+              ...state,
+              isLoading: false,
+              errorDelete: true,
+              deleted: false,
             }  
         default: 
           return state
