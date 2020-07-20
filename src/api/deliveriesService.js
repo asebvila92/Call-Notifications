@@ -8,3 +8,19 @@ export const getAllDeliveries = (userToken) => {
     }
   })
 }
+
+export const addDelivery = (userToken, delivery) => {
+  return axios.post(`${API_URL}/deliveries`, delivery, {
+    headers: {
+      Authorization: 'Bearer ' + userToken
+    }
+  })
+}
+
+export const deleteDelivery = (userToken, idDelivery) => {
+  return axios.delete(`${API_URL}/deliveries/${idDelivery}`,{
+    headers: {
+      Authorization: 'Bearer ' + userToken,
+    }
+  })
+}

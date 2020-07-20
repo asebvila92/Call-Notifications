@@ -5,7 +5,6 @@ import { StyleSheet, Image } from 'react-native'
 import Header from '../components/layout/header';
 import BottomTabBar from '../components/layout/bottomTabBar';
 import Home from '../screens/Home';
-import Logs from '../screens/Logs';
 import NewDelivery from '../screens/newDelivery';
 import Deliveries from '../screens/deliveries';
 import Profile from '../screens/profile';
@@ -39,20 +38,6 @@ function NewDeliveryScreen() {
   );
 }
 
-const LogsStack = createStackNavigator();
-function LogsStackScreen() {
-  return (
-    <LogsStack.Navigator
-      headerMode='screen'
-      screenOptions={{
-        header: (props) => <Header navigation={props.scene.descriptor.navigation} title={'Registros'} />
-      }}
-    >
-      <LogsStack.Screen name="Registros" component={Logs} />
-    </LogsStack.Navigator>
-  );
-}
-
 const DeliveriesStack = createStackNavigator();
 function DeliveriesStackScreen() {
   return (
@@ -72,7 +57,7 @@ function AuthBottomNavigator() {
   //createChannelNotification();
   return (
       <Tab.Navigator
-        initialRouteName="Home"
+        initialRouteName="Nueva"
         tabBar={props => <BottomTabBar {...props} />}
       >
         <Tab.Screen 
@@ -99,21 +84,6 @@ function AuthBottomNavigator() {
               const iconImg = props.isFocused ? 
                 require('../../assets/bottomBarIcons/add-focus.png') : 
                 require('../../assets/bottomBarIcons/add.png')
-              return (
-                <Image style={styles.tabIcon} source={iconImg} />
-              )
-            }
-          }}
-        />
-        <Tab.Screen 
-          name="Registros" 
-          component={LogsStackScreen} 
-          options={{
-            title: 'Registros',
-            tabBarIcon: (props) => {
-              const iconImg = props.isFocused ? 
-                require('../../assets/bottomBarIcons/user-list-2.png') : 
-                require('../../assets/bottomBarIcons/user-list.png')
               return (
                 <Image style={styles.tabIcon} source={iconImg} />
               )
