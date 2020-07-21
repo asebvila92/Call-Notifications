@@ -33,7 +33,7 @@ export default function DetailsDelivery(props) {
   useEffect(() => {
     if(wasDeletedDelivery){
       setMessageInfo(['',''])
-      props.navigation.navigate('Entregas')
+      props.navigation.goBack()
     }else if(errorDeleteDelivery){
       setMessageInfo(['errDelete', 'No se pudo eliminar, intenta nuevamente'])
     }

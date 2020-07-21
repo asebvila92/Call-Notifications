@@ -1,47 +1,40 @@
-import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import { useSelector } from 'react-redux';
-import WidgetDashboard from '../components/navigation/widgetDashboard';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { ListItem, Divider } from 'react-native-elements';
+import { useSelector, useDispatch } from 'react-redux';
+import WidgetDashboard from '../components/navigation/widgetDashboard';
+import { getDateWithoutTime, formatDate } from '../helpers/dateHelpers';
+import ViewIsLoading from '../components/layout/viewIsLoading';
+import MessageResponse from '../components/navigation/messageResponse';
+import { invokeGetDeliveries } from '../redux/actions';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function Home(props) {
   const { navigation } = props;
+  const [deliveriesOfToday, setDeliveriesOfToday] = useState([]);
   const userData = useSelector(store => store.auth.userData);
+  const userToken = useSelector(store => store.auth.token);
+  const deliveries = useSelector(store => store.deliveries.deliveries);
+  const isLoading = useSelector(store => store.deliveries.isLoading);
+  const dispatch = useDispatch();
 
-  //mook list
-  const list = [
-    {
-      name: 'Gerardo',
-      article: 'Birbo Carne 25kg',
-      lastDelivery: '26-04-2020'
-    },
-    {
-      name: 'Virginia M.C. Martinez',
-      article: 'Nutra Nuggets Verde 15kg',
-      lastDelivery: '26-04-2020'
-    },
-    {
-      name: 'Roberto',
-      article: 'Eukanuba Adulto Large Breed 15kg',
-      lastDelivery: '26-04-2020'
-    },
-    {
-      name: 'Graciela Torron',
-      article: 'Nutra azul 25kg',
-      lastDelivery: '26-04-2020'
-    },
-    {
-      name: 'Martin Leñeria',
-      article: 'Birbo Carne 25kg',
-      lastDelivery: '26-04-2020'
-    },
-    {
-      name: 'Fernando Macri',
-      article: 'Birbo Carne 25kg',
-      lastDelivery: '26-04-2020'
-    },
-  ]
   
+  useEffect(() => {
+    invokeGetDeliveries(dispatch, userToken)
+  },[])
+
+  useEffect(() => {
+    if(deliveries){
+      let deliveriesOfToday = deliveries.filter((log) => {
+        return getDateWithoutTime(new Date()).getTime() == getDateWithoutTime(new Date(log.nextDelivery._seconds * 1000)).getTime()
+      })
+      deliveriesOfToday.sort((first, second) => (
+        first.lastDelivery._seconds - second.lastDelivery._seconds
+      ))
+      setDeliveriesOfToday(deliveriesOfToday)
+    }
+  }, [deliveries])
+
   return (
     <View style={styles.container}>
       <Text style={styles.welcome}>
@@ -51,34 +44,40 @@ export default function Home(props) {
       <View style={styles.content}>
         <WidgetDashboard title='Programar Llamado' screenToNavigate='Nueva' navigation={navigation} />
         <WidgetDashboard title='Tabla de Registros' screenToNavigate='Entregas' navigation={navigation} />
-        <View style={styles.contentListOfToday}>
-          {
-            list.length > 0 ? 
-              <ScrollView style={styles.listOfToday}>
-              {
-                list.map((item, i) => (
-                  <View key={i}>
-                    <Divider />
-                    <ListItem
-                      key={i}
-                      title={item.name}
-                      titleStyle={{fontSize: 14}}
-                      subtitle={item.article}
-                      subtitleStyle={{fontSize:13}}
-                      rightTitle='ultima entrega'
-                      rightTitleStyle={{fontSize: 12}}
-                      rightSubtitle={item.lastDelivery}
-                    />
-                  </View>
-                ))
-              }
-              </ScrollView>
-            :
-              <View style={{padding:10}}>
-                <Text style={{fontStyle: 'italic'}}>No hay registros para hoy</Text>
-              </View>  
-          }
-        </View>
+        {isLoading ? 
+          <View style={{marginTop: 60}}><ViewIsLoading /></View> 
+        :
+          <View style={styles.contentListOfToday}>
+            {
+              deliveriesOfToday.length > 0 ? 
+                <ScrollView style={styles.listOfToday}>
+                {
+                  deliveriesOfToday.map((item, i) => {
+                    return (
+                      <TouchableOpacity key={i} onPress={() => navigation.navigate('Detalles',{detailsDelivery: item})}>
+                        <Divider />
+                        <ListItem
+                          key={i}
+                          title={item.client}
+                          titleStyle={{fontSize: 14}}
+                          subtitle={item.article}
+                          subtitleStyle={{fontSize:13}}
+                          rightTitle='ultima entrega'
+                          rightTitleStyle={{fontSize: 12}}
+                          rightSubtitle={formatDate(new Date(item.lastDelivery._seconds * 1000))}
+                        />
+                      </TouchableOpacity>
+                    )
+                  })
+                }
+                </ScrollView>
+              :
+                <View style={{padding:10}}>
+                  <MessageResponse isError={false} message='No hay registros para hoy' />
+                </View>  
+            }
+          </View>
+        }
       </View>
     </View>
   );
