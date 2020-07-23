@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, Image } from 'react-native'
 import Header from '../components/layout/header';
 import BottomTabBar from '../components/layout/bottomTabBar';
-import Home from '../screens/Home';
+import Home from '../screens/home';
 import NewDelivery from '../screens/newDelivery';
 import Deliveries from '../screens/deliveries';
 import Profile from '../screens/profile';
@@ -57,7 +57,7 @@ function AuthBottomNavigator() {
   //createChannelNotification();
   return (
       <Tab.Navigator
-        initialRouteName="Nueva"
+        initialRouteName="Home"
         tabBar={props => <BottomTabBar {...props} />}
       >
         <Tab.Screen 
