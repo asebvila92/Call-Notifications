@@ -83,7 +83,7 @@ export default function NewDelivery(props) {
   }
 
   return (
-    <ScrollView style={styles.container} keyboardShouldPersistTaps={true}>
+    <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
       <View style={styles.content}>
         {messageInfo[0] === 'client' ? <MessageResponse isError={true} message={messageInfo[1]}/> : null}
         <InputWithIcon value={client} onChangeValue={setClient} placeholder='Cliente' iconType='font-awesome' iconName='user' color='#1885f2' />

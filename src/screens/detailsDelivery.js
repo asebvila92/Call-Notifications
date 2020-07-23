@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, ScrollView, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, ActivityIndicator, Linking, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { useSelector, useDispatch } from 'react-redux';
 import InputWithLabel from '../components/navigation/inputWithLabel';
@@ -47,6 +47,14 @@ export default function DetailsDelivery(props) {
     return unsubscribe;
   },[])
 
+  function openPhone(){
+    if(phone !== ''){
+      Linking.openURL(`tel:${phone}`)
+    }else{
+      setMessageInfo(['',''])
+    }
+  }
+
   function deleteDelivery(){
     CustomAlert(dispatch, userToken, detailsDelivery.id)
   }  
@@ -66,7 +74,12 @@ export default function DetailsDelivery(props) {
           </View>
           <View style={styles.vwInRow}>
             <InputWithLabel label='Precio' editable={false} type='numeric' value={price} onChangeValue={setPrice} />
-            <InputWithLabel label='Telefono' editable={false} type='phone-pad' value={phone} onChangeValue={setPhone} />
+            <View style={styles.vwPhone}>
+              <TouchableOpacity disabled={phone ? false : true}  onPress={openPhone}>
+                <Icon containerStyle={styles.iconPhone} name='phone-outgoing' size={20} type='feather' color={phone? 'green' : '#a5a5a5'} reverse />
+              </TouchableOpacity>
+              <InputWithLabel label='Telefono' editable={false} type='phone-pad' value={phone} onChangeValue={setPhone} />
+            </View>
           </View>
           <InputWithLabel label='Direccion' editable={false} value={address} onChangeValue={setAddress} />
           <TextArea
@@ -122,6 +135,12 @@ const styles = StyleSheet.create({
   vwInRow: {
     flexDirection: 'row',
     justifyContent: "space-between"
+  },
+  vwPhone: {  
+    flexDirection: 'row',
+  },
+  iconPhone: {
+    alignSelf: 'center'
   },
   savedBy: {
     fontSize: 11,
