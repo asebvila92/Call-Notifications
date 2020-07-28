@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AuthStackNavigator from './src/navigation/authStackNavigator';
 import Login from './src/screens/login';
 import ViewIsLoading from './src/components/layout/viewIsLoading';
@@ -18,11 +19,13 @@ export default function AppContainer() {
   return (
     isOpening ?
       <ViewIsLoading />
-    :  
-      <NavigationContainer>
-        {
-          token ? <AuthStackNavigator /> : <Login />
-        }
-      </NavigationContainer>
+    :
+      <SafeAreaProvider> 
+        <NavigationContainer>
+          {
+            token ? <AuthStackNavigator /> : <Login />
+          }
+        </NavigationContainer>
+      </SafeAreaProvider> 
   );
 }

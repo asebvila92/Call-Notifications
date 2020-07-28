@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, Text, Platform } from 'react-native'
 import { useSelector } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
-import { SafeAreaView } from 'react-navigation';
+import SafeAreaView from 'react-native-safe-area-view';
 import { Header } from 'react-native-elements';
 import { FontAwesome } from '@expo/vector-icons';
 import Constants from 'expo-constants';

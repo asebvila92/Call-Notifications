@@ -3,7 +3,6 @@
     "name": "Notificaciones De Llamados",
     "slug": "NotificaLlamados",
     "privacy": "public",
-    "sdkVersion": "36.0.0",
     "platforms": [
       "android"
     ],
