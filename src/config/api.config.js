@@ -2,7 +2,7 @@ export const IS_DEV = __DEV__;
 export const IS_PRODUCTION = !IS_DEV;
 
 export const DEV_ENV = {
-  API_DOMAIN: 'http://192.168.1.11:3000',
+  API_DOMAIN: 'http://192.168.1.16:3000',
 }
 
 //We will build the project with development values while we dont have API in production, for that 
