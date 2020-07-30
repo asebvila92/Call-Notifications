@@ -22,12 +22,12 @@ export default function Profile() {
         </View>
         <View style={styles.vwUserData}>
           <Text style={styles.fieldUser}>
-            <Text style={styles.label}>Dispositivo: </Text>  
-            {userData.deviceId}
-          </Text>
-          <Text style={styles.fieldUser}>
             <Text style={styles.label}>Usuario: </Text>  
             {userData.username}
+          </Text>
+          <Text style={styles.fieldUser}>
+            <Text style={styles.label}>Dispositivo: </Text>  
+            {userData.deviceId}
           </Text>
         </View>
         
