@@ -4,6 +4,13 @@ import * as Notifications from 'expo-notifications';
 import * as Permissions from 'expo-permissions';
 
 export async function registerForPushNotificationsAsync() {
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+    }),
+  });
   if (Constants.isDevice) {
     const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
     let finalStatus = existingStatus;
