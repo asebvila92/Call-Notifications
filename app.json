@@ -15,7 +15,7 @@
     },
     "notification": {
       "icon": "./assets/notification-icon.png",
-      "color": "white",
+      "color": "#000000",
       "androidMode": "default"
     },
     "ios": {
