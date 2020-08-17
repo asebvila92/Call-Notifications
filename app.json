@@ -3,7 +3,6 @@
     "name": "Notificaciones De Llamados",
     "slug": "NotificaLlamados",
     "privacy": "public",
-    "sdkVersion": "36.0.0",
     "platforms": [
       "android"
     ],
@@ -14,11 +13,17 @@
       "resizeMode": "contain",
       "backgroundColor": "#4167b0"
     },
+    "notification": {
+      "icon": "./assets/notification-icon.png",
+      "color": "#000000",
+      "androidMode": "default"
+    },
     "ios": {
       "bundleIdentifier": "com.halloweenkennel.halloweenkennel",
       "buildNumber": "1.0.0"
     },
     "android": {
+      "useNextNotificationsApi": true,
       "package": "com.halloweenkennel.halloweenkennel",
       "versionCode": 1
     }

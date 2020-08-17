@@ -49,6 +49,8 @@ export default function NewDelivery(props) {
   },[])
 
   function saveDelivery() {
+    nextDelivery.setHours(0,0,0,0)
+    lastDelivery.setHours(0,0,0,0)
     const newDelivery = {
       client: client,
       article: article,
