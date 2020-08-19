@@ -1,21 +1,27 @@
 import {
     DELIVERIES_PENDING,
+    DELIVERIES_PENDING_UPDATE,
     CLEAN_FLAGS,
     GET_DELIVERIES_SUCCESS,
     GET_DELIVERIES_ERROR,
     ADD_DELIVERY_SUCCESS,
     ADD_DELIVERY_ERROR,
     DELETE_DELIVERY_SUCCESS,
-    DELETE_DELIVERY_ERROR, 
+    DELETE_DELIVERY_ERROR,
+    UPDATE_DELIVERY_SUCCESS,
+    UPDATE_DELIVERY_ERROR 
   } from '../constants';
   
   const initialState = {
     isLoading: false,
+    isLoadingUpdate: false,
+    errorUpdate: false,
     errorGetDeliveries: false,
     errorAddDelivery: false,
     errorDelete: false,
     lastAdded: '',
-    deleted: false
+    deleted: false,
+    updated: false,
   }
   const deliveriesReducer = (state = initialState, action) => {
     switch(action.type){
@@ -24,7 +30,9 @@ import {
             ...state,
             lastAdded: '',
             deleted: null,
-            errorDelete: null
+            errorDelete: null,
+            updated: null,
+            errorUpdate: null
           }
         case DELIVERIES_PENDING:
           return {
@@ -35,6 +43,15 @@ import {
             errorDelete: null,
             lastAdded: ''
           }
+        case DELIVERIES_PENDING_UPDATE: {
+          return {
+            ...state,
+            isLoadingUpdate: true,
+            errorUpdate: null,
+            errorAddDelivery: null,
+            errorDelete: null,
+          }
+        }  
         case GET_DELIVERIES_SUCCESS: 
           return {
             ...state,
@@ -68,6 +85,8 @@ import {
               isLoading: false,
               errorDelete: false,
               deleted: true,
+              updated: false,
+              errorUpdate: false,
               deliveries: action.payload.deliveries
             }
           case DELETE_DELIVERY_ERROR:
@@ -76,7 +95,28 @@ import {
               isLoading: false,
               errorDelete: true,
               deleted: false,
-            }  
+              updated: false,
+              errorUpdate: false,
+            }
+          case UPDATE_DELIVERY_SUCCESS:
+            return {
+              ...state,
+              isLoadingUpdate: false,
+              errorUpdate: false,
+              updated: true,
+              deleted: false,
+              errorDelete: false,
+              deliveries: action.payload.data
+            }
+          case UPDATE_DELIVERY_ERROR:
+            return {
+              ...state,
+              isLoadingUpdate: false,
+              errorUpdate: true,
+              updated: false,
+              deleted: false,
+              errorDelete: false
+            }      
         default: 
           return state
     }

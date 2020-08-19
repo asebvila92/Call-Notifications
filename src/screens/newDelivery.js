@@ -8,7 +8,8 @@ import DateTimePicker from '../components/navigation/DateTimePicker';
 import TextArea from '../components/navigation/textArea';
 import MessageResponse from '../components/navigation/messageResponse';
 import { invokeAddDelivery } from '../redux/actions';
-import { CLEAN_FLAGS } from '../redux/constants'; 
+import { CLEAN_FLAGS } from '../redux/constants';
+import { validateClientAndDates } from '../helpers/dateHelpers'; 
 
 export default function NewDelivery(props) {
   const [nextDelivery, setNextDelivery] = useState(
@@ -49,29 +50,29 @@ export default function NewDelivery(props) {
   },[])
 
   function saveDelivery() {
-    nextDelivery.setHours(0,0,0,0)
-    lastDelivery.setHours(0,0,0,0)
-    const newDelivery = {
-      client: client,
-      article: article,
-      lastDelivery: lastDelivery,
-      nextDelivery: nextDelivery,
-      cellphone: phone,
-      price: price,
-      address: address,
-      observations: observations,
-      user: userData.username
-    }
-    if(client !== '' && client.replace(/ /g, '') !== ''){
-      if(nextDelivery > lastDelivery){
-        invokeAddDelivery(dispatch, userToken, newDelivery);
-        setMessageInfo(['','']);
-        resetInputs();
-      }else{
-        setMessageInfo(['dates', 'Proxima entrega debe ser posterior a ultima entrega']);
+    const validationDelivery = validateClientAndDates(client, lastDelivery, nextDelivery);
+  
+    if(validationDelivery.isValid){
+      const newDelivery = {
+        client: client,
+        article: article,
+        lastDelivery: lastDelivery.setHours(0,0,0,0),
+        nextDelivery: nextDelivery.setHours(0,0,0,0),
+        cellphone: phone,
+        price: price,
+        address: address,
+        observations: observations,
+        user: userData.username
       }
+      invokeAddDelivery(dispatch, userToken, newDelivery);
+      setMessageInfo(['','']);
+      resetInputs();
     }else{
-      setMessageInfo(['client', 'Campo cliente es requerido']);
+      if(validationDelivery.err === 'dates'){
+        setMessageInfo(['dates', validationDelivery.msg]);
+      }else{
+        setMessageInfo(['client', validationDelivery.msg]);
+      }
     }
   }
 
