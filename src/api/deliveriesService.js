@@ -24,3 +24,11 @@ export const deleteDelivery = (userToken, idDelivery) => {
     }
   })
 }
+
+export const updateDelivery = (userToken, idDelivery, delivery) => {
+  return axios.put(`${API_URL}/deliveries/${idDelivery}`, delivery,{
+    headers: {
+      Authorization: 'Bearer ' + userToken,
+    }
+  })
+}

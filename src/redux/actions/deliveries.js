@@ -1,13 +1,16 @@
 import {
   DELIVERIES_PENDING,
+  DELIVERIES_PENDING_UPDATE,
   GET_DELIVERIES_SUCCESS,
   GET_DELIVERIES_ERROR,
   ADD_DELIVERY_SUCCESS,
   ADD_DELIVERY_ERROR,
   DELETE_DELIVERY_SUCCESS,
-  DELETE_DELIVERY_ERROR
+  DELETE_DELIVERY_ERROR,
+  UPDATE_DELIVERY_SUCCESS,
+  UPDATE_DELIVERY_ERROR
 } from '../constants';
-import { getAllDeliveries, addDelivery, deleteDelivery } from '../../api/deliveriesService';
+import { getAllDeliveries, addDelivery, deleteDelivery, updateDelivery } from '../../api/deliveriesService';
 
 export const invokeGetDeliveries = (dispatch, userToken) => {
   dispatch({
@@ -70,4 +73,26 @@ export const invokeDeleteDelivery = (dispatch, userToken, idDelivery) => {
       })
     }
   )  
+}
+
+export const invokeUpdateDelivery = (dispatch, userToken, idDelivery, dataDelivery) => {
+  dispatch({
+    type: DELIVERIES_PENDING_UPDATE,
+  })
+
+  updateDelivery(userToken, idDelivery, dataDelivery).then(
+    (response) => {
+      dispatch({
+        type: UPDATE_DELIVERY_SUCCESS,
+        payload: response.data
+      })
+    },
+    (err) => {
+      dispatch({
+        type: UPDATE_DELIVERY_ERROR,
+        payload: err
+      })
+    }
+  )
+
 }
