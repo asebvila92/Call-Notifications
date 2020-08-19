@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, ScrollView, ActivityIndicator, Linking, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, ActivityIndicator, Linking, TouchableOpacity, Switch } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { useSelector, useDispatch } from 'react-redux';
 import InputWithLabel from '../components/navigation/inputWithLabel';
@@ -15,6 +15,7 @@ import { validateClientAndDates } from '../helpers/dateHelpers';
 export default function DetailsDelivery(props) {
   const { detailsDelivery } = props.route.params
   const [messageInfo, setMessageInfo] = useState(['','']);
+  const [isEditable, setIsEditable] = useState(false)
   const [client, setClient] = useState(detailsDelivery.client);
   const [article, setArticle] = useState(detailsDelivery.article);
   const [price, setPrice] = useState(detailsDelivery.price);
@@ -30,7 +31,6 @@ export default function DetailsDelivery(props) {
   const wasUpdateDelivery = useSelector(store => store.deliveries.updated);
   const errorUpdateDelivery = useSelector(store => store.deliveries.errorUpdate);
   const dispatch = useDispatch();
-  let isEditable = true;
 
   const [lastDelivery, setLastDelivery] = useState(
     new Date(detailsDelivery.lastDelivery._seconds * 1000));
@@ -69,6 +69,7 @@ export default function DetailsDelivery(props) {
   function deleteDelivery(){
     CustomAlert(dispatch, userToken, detailsDelivery.id)
   }
+
   function updateDelivery(){
     const validationDelivery = validateClientAndDates(client, lastDelivery, nextDelivery);
 
@@ -98,7 +99,14 @@ export default function DetailsDelivery(props) {
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
       <View style={styles.content}>
-        <View style={styles.vwLock}>
+        <View style={styles.vwSwitch}>
+          <Text style={isEditable ? {...styles.txtSwitch, color: 'green'} : styles.txtSwitch}>Editar</Text>
+          <Switch
+            trackColor={{ false: "#767577", true: "#ffcc4d" }}
+            thumbColor={isEditable ? "green" : "#f4f3f4"}
+            onValueChange={() => setIsEditable(prevState => !prevState)}
+            value={isEditable}
+          />
         </View>
         <Text style={styles.txtClient}>{client}</Text>
         <View style={styles.dataDelivery}>
@@ -136,7 +144,7 @@ export default function DetailsDelivery(props) {
         : messageInfo[0] === 'updateSuccess' ? 
           <MessageResponse isError={false} message={messageInfo[1]} /> 
         : null}
-        <ButtonWithGradient text='Guardar Cambios' colorBegin='#1885f2' colorEnd='#1cacdc' disabled={isLoadingUpdate} onPressbtn={updateDelivery} />
+        <ButtonWithGradient text='Guardar Cambios' colorBegin='#1885f2' colorEnd='#1cacdc' disabled={isLoadingUpdate || !isEditable} onPressbtn={updateDelivery} />
         <Text style={styles.savedBy}>{`Ultima modificacion: ${detailsDelivery.savedBy}`}</Text>
       </View>
       {isLoading ? <ActivityIndicator size={35} color='#e73827'/> : null}
@@ -158,8 +166,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 3
   },
-  vwLock: {
-    flexDirection: 'row'
+  vwSwitch: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: 5
+  },
+  txtSwitch: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    fontStyle: 'italic',
+    color: '#4d4f5c',
   },
   txtClient: {
     fontSize: 22,
