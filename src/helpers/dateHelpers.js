@@ -22,7 +22,7 @@ export function validateClientAndDates(client, lastDelivery, nextDelivery) {
   }else{
     validation.isValid = false;
     validation.err = 'client';
-    validation.msg = 'Campo cliente es requerido'
+    validation.msg = 'Campo cliente es requerido';
   }
   return validation
 }
