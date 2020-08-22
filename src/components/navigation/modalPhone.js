@@ -1,10 +1,12 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { StyleSheet, Text, Linking, View,TouchableOpacity } from 'react-native';
 import { Overlay, Icon} from 'react-native-elements';
 
 
 export default function ModalPhone(props) {
   const { visible, onChangeVisibility, phone } = props
+  const messageForClients = useSelector(store => store.auth.messageForClients);
 
   const selectResource = (resourse) => {
     switch(resourse){
@@ -12,10 +14,10 @@ export default function ModalPhone(props) {
         Linking.openURL(`tel:${phone}`);
         break;
       case 'whatsapp':
-        Linking.openURL(`whatsapp://send?text=hello&phone=+598${phone.replace('0','')}`);
+        Linking.openURL(`whatsapp://send?text=${messageForClients}&phone=+598${phone.replace('0','')}`);
         break;
       case 'sms':
-        Linking.openURL(`sms://${phone}?body=hello`);
+        Linking.openURL(`sms://${phone}?body=${messageForClients}`);
         break;  
       default:
         return    
