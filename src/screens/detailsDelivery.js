@@ -8,6 +8,7 @@ import EditDateTimePicker  from '../components/navigation/editDateTimePicker';
 import TextArea from '../components/navigation/textArea';
 import MessageResponse from '../components/navigation/messageResponse';
 import CustomAlert from '../components/navigation/customAlert';
+import Modal from '../components/navigation/modalPhone';
 import { invokeUpdateDelivery } from '../redux/actions';
 import { CLEAN_FLAGS } from '../redux/constants';
 import { validateClientAndDates } from '../helpers/dateHelpers';
@@ -16,6 +17,7 @@ export default function DetailsDelivery(props) {
   const { detailsDelivery } = props.route.params
   const [messageInfo, setMessageInfo] = useState(['','']);
   const [isEditable, setIsEditable] = useState(false)
+  const [modalVisible, setModalVisible] = useState(false)
   const [client, setClient] = useState(detailsDelivery.client);
   const [article, setArticle] = useState(detailsDelivery.article);
   const [price, setPrice] = useState(detailsDelivery.price);
@@ -60,7 +62,7 @@ export default function DetailsDelivery(props) {
 
   function openPhone(){
     if(phone !== ''){
-      Linking.openURL(`tel:${phone}`)
+      setModalVisible(true)
     }else{
       setMessageInfo(['',''])
     }
@@ -98,6 +100,7 @@ export default function DetailsDelivery(props) {
   
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
+      <Modal visible={modalVisible} onChangeVisibility={setModalVisible} phone={phone} />
       <View style={styles.content}>
         <View style={styles.vwSwitch}>
           <Text style={isEditable ? {...styles.txtSwitch, color: 'green'} : styles.txtSwitch}>Editar</Text>

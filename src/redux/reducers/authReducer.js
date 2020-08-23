@@ -29,13 +29,18 @@ const authReducer = (state = initialState, action) => {
           errorAuth: null
         }
       case GET_TOKEN_SUCCESS:
-        saveObject("@userData", {...action.payload.userData, token: action.payload.token}); // save data in AsyncStorage
+        saveObject("@userData", {
+          ...action.payload.userData, 
+          token: action.payload.token,
+          messageForClients: action.payload.clientsMessage.message
+        }); // save data in AsyncStorage
         return {
           ...state,
           isLoading: false,
           errorAuth: false,
           token: action.payload.token,
           userData: action.payload.userData,
+          messageForClients: action.payload.clientsMessage.message
         }
       case GET_TOKEN_ERROR: 
         return {
@@ -50,6 +55,7 @@ const authReducer = (state = initialState, action) => {
           isOpening: false,
           errorAuth: false,
           token: data.token,
+          messageForClients: data.messageForClients,
           userData: data
         }
       case SET_NULL_FROM_ASYNCSTORAGE:
@@ -58,7 +64,7 @@ const authReducer = (state = initialState, action) => {
           isOpening: false,
           errorAuth: false
         }
-      case LOG_OUT: 
+      case LOG_OUT:
         removeData("@userData"); // remove data from AsyncStorage
         return {
           ...state,

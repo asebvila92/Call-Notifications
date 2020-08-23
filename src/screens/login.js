@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Input, Icon } from 'react-native-elements';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useDispatch, useSelector } from 'react-redux';
 import { invokeLogin } from '../redux/actions/auth';
 
@@ -15,21 +17,31 @@ export default function Login(props) {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Iniciar sesion</Text>
-        <TextInput 
-          style={styles.txtInput} 
-          placeholder="Usuario" 
-          placeholderTextColor="#ececec"
+      
+    <LinearGradient
+      colors={['#1885f2', '#2b8ff3', '#1cacdc']}
+      style={styles.container}
+    > 
+      <View style={styles.vwInput}>
+        <Input
+          label='Usuario'
+          placeholder='Tu nombre'
+          leftIcon={<Icon type='font-awesome' name='user' size={30} color='black'/>}
+          style={styles.input}
           value={username} 
-          onChangeText={setUsername}/>
-        <TextInput 
-          style={styles.txtInput} 
-          placeholder="Constraseña" 
-          placeholderTextColor="#ececec"
-          secureTextEntry={true} 
+          onChangeText={setUsername}
+        />
+      </View>
+      <View style={styles.vwInput}>
+        <Input
+          label='Contraseña'
+          placeholder='************'
+          leftIcon={<Icon type='font-awesome' name='lock' size={30} color='black'/>}
+          secureTextEntry={true}
           value={password}
-          onChangeText={setPassword}/>
+          onChangeText={setPassword}
+        />
+      </View>
         {
           isLoading ? <ActivityIndicator style={styles.loader} size="large" color="#ffff" /> : null
         }
@@ -40,7 +52,8 @@ export default function Login(props) {
           <Text style={styles.txtLogin}>Entrar</Text>
         </TouchableOpacity>
 
-    </View>
+    </LinearGradient>
+     
   );
 }
 
@@ -48,23 +61,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#1885f2',
     justifyContent: 'center'
   },
-  title:{
-    fontSize: 40,
-    color: '#f5f5f5',
-    marginBottom: 30,
-  },
-  txtInput: {
-    color: '#ffff',
-    fontSize: 18,
-    maxHeight: 70,
-    marginBottom: 20,
+  vwInput: {
+    backgroundColor: '#ffff',
     borderRadius: 10,
-    borderWidth: 1.5,
-    borderColor: '#ececec',
-    padding: 15
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    marginBottom: 10,
   },
   loader: {
     marginBottom: 10
@@ -75,11 +79,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   btnLogin: {
-    borderWidth: 1.5,
-    borderColor: 'white',
-    borderRadius: 30,
+    backgroundColor: '#ffcc4d',
+    borderRadius: 10,
     padding: 15,
-    maxHeight: 50,
+    maxHeight: 80,
     marginBottom: 20,
     alignItems: 'center',
     justifyContent: 'center',
@@ -87,6 +90,6 @@ const styles = StyleSheet.create({
   txtLogin: {
     fontSize: 20,
     color:'#fff',
-    fontWeight: '600'
+    fontWeight: 'bold'
   },
 });
