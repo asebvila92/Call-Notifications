@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { ListItem, Divider } from 'react-native-elements';
 import { useSelector, useDispatch } from 'react-redux';
 import WidgetDashboard from '../components/navigation/widgetDashboard';
@@ -7,7 +7,7 @@ import { getDateWithoutTime, formatDate } from '../helpers/dateHelpers';
 import ViewIsLoading from '../components/layout/viewIsLoading';
 import MessageResponse from '../components/navigation/messageResponse';
 import { invokeGetDeliveries } from '../redux/actions';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { handleAndroidBackButton, removeAndroidBackButtonHandler } from '../helpers/backButtonAndroid';
 
 export default function Home(props) {
   const { navigation } = props;
@@ -21,6 +21,10 @@ export default function Home(props) {
   
   useEffect(() => {
     invokeGetDeliveries(dispatch, userToken)
+    handleAndroidBackButton('home')
+    return () => {
+      removeAndroidBackButtonHandler()
+    }
   },[])
 
   useEffect(() => {

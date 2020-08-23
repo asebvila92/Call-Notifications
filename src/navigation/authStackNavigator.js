@@ -54,7 +54,6 @@ function DeliveriesStackScreen() {
 
 const Tab = createBottomTabNavigator();
 function AuthBottomNavigator() {
-  //createChannelNotification();
   return (
       <Tab.Navigator
         initialRouteName="Home"
