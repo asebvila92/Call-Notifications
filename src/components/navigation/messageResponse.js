@@ -3,8 +3,13 @@ import { StyleSheet, View, Text } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 export default function MessageResponse(props) {
-  const { isError, message } = props
-  const color = isError ? 'red' : 'green'
+  const { isError, message, colorText } = props
+  
+  let color =  colorText ? colorText : null
+  if(color === null){
+    color =  isError ? 'red' : 'green'
+  }
+
   return (
     <View style={styles.vwMsg}>
       <Icon

@@ -6,7 +6,7 @@
     "platforms": [
       "android"
     ],
-    "version": "1.0.0",
+    "version": "1.0.3",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splashScreen1.png",
@@ -15,7 +15,7 @@
     },
     "notification": {
       "icon": "./assets/notification-icon.png",
-      "color": "#000000",
+      "color": "#ffffff",
       "androidMode": "default"
     },
     "ios": {
@@ -25,7 +25,8 @@
     "android": {
       "useNextNotificationsApi": true,
       "package": "com.halloweenkennel.halloweenkennel",
-      "versionCode": 1
+      "googleServicesFile": "./google-services.json",
+      "versionCode": 5
     }
   }
 }

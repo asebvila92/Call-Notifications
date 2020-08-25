@@ -9,10 +9,12 @@ import {
 } from '../constants';
 
 import { removeData, saveObject } from '../../helpers/asyncStorage';
+import { Alert } from 'react-native';
 
 const initialState = {
   isLoading: false,
   errorAuth: null,
+  token: null,
   isOpening: false
 }
 const authReducer = (state = initialState, action) => {
@@ -26,13 +28,15 @@ const authReducer = (state = initialState, action) => {
         return {
           ...state,
           isLoading: true,
-          errorAuth: null
+          errorAuth: null,
+          token: null
         }
       case GET_TOKEN_SUCCESS:
+        const token = action.payload.token;
         saveObject("@userData", {
           ...action.payload.userData, 
-          token: action.payload.token,
-          messageForClients: action.payload.clientsMessage.message
+          token: token,
+          messageForClients: token ? action.payload.clientsMessage.message : null
         }); // save data in AsyncStorage
         return {
           ...state,
@@ -40,7 +44,7 @@ const authReducer = (state = initialState, action) => {
           errorAuth: false,
           token: action.payload.token,
           userData: action.payload.userData,
-          messageForClients: action.payload.clientsMessage.message
+          messageForClients: token ? action.payload.clientsMessage.message : null
         }
       case GET_TOKEN_ERROR: 
         return {

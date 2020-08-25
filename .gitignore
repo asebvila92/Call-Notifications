@@ -11,6 +11,7 @@ web-build/
 web-report/
 src/config/credentials.js
 src/config/routesApi.js
+/google-services.json
 
 # macOS
 .DS_Store
