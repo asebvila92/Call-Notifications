@@ -13,7 +13,7 @@ export default function Deliveries(props) {
   const userToken = useSelector(store => store.auth.token);
   const deliveries = useSelector(store => store.deliveries.deliveries);
   const isLoading = useSelector(store => store.deliveries.isLoading)
-  const tableHead = ["Cliente", "Proxima entrega", "Ultima entrega", "Articulo"];
+  const tableHead = ["Cliente", "Prox", "Ultima", "Articulo"];
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export default function Deliveries(props) {
     <View style={styles.container}>
       <View style={styles.logView} >
       <SearchBar 
-        platform='ios' 
+        platform='android' 
         placeholder="Buscar..."
         round={true}
         value={search}

@@ -1,7 +1,8 @@
-import { Platform } from 'react-native';
+import { Platform, Alert } from 'react-native';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import * as Permissions from 'expo-permissions';
+import * as Contacts from 'expo-contacts';
 
 export async function registerForPushNotificationsAsync() {
   Notifications.setNotificationHandler({
@@ -34,4 +35,11 @@ export async function registerForPushNotificationsAsync() {
       lightColor: '#FF231F7C',
     });
   }
+}
+
+export async function getContactsPermissions() {
+  const { status } = await Contacts.requestPermissionsAsync();
+  if (status !== 'granted') {
+    Alert.alert('Aviso','No podras elegir un contacto a la hora de agregar una nueva entrega')
+  } 
 }
