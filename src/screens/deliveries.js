@@ -9,7 +9,8 @@ import { invokeGetDeliveries } from '../redux/actions'
 import { formatDate } from '../helpers/dateHelpers';
 
 export default function Deliveries(props) {
-  const [search, setSearch] = useState('');
+  const [searchedLog, setSearchedLog] = useState('');
+  const [filteredDeliveries, setFilteredDeliveries] = useState()
   const userToken = useSelector(store => store.auth.token);
   const deliveries = useSelector(store => store.deliveries.deliveries);
   const isLoading = useSelector(store => store.deliveries.isLoading)
@@ -20,14 +21,27 @@ export default function Deliveries(props) {
     invokeGetDeliveries(dispatch, userToken)
   }, [])
 
+  useEffect(() => {
+    if(deliveries && deliveries.length > 0){
+      setSearchedLog('');
+      setFilteredDeliveries(deliveries)
+    }
+  }, [deliveries])
+
   function viewDetails(detailsDelivery) {
     props.navigation.navigate('Detalles', {
       detailsDelivery: detailsDelivery
     })
   }
 
+  function findALogByClient(wordInput) {
+    setSearchedLog(wordInput);
+    let filteredDeliveries = deliveries.filter((del) => (del.client.toLowerCase().indexOf(wordInput.toLowerCase()) >= 0));
+    setFilteredDeliveries(filteredDeliveries);
+  }
+
   function createTable() {
-    const deliveriesTable = deliveries.map((log) => {
+    const deliveriesTable = filteredDeliveries.map((log) => {
       const nextDelivery = new Date(log.nextDelivery._seconds * 1000);
       const lastDelivery = new Date(log.lastDelivery._seconds * 1000);
       const row = [
@@ -47,6 +61,7 @@ export default function Deliveries(props) {
   }
 
   function handleRefresh(){
+    setSearchedLog('');
     invokeGetDeliveries(dispatch, userToken)
   }
 
@@ -57,8 +72,10 @@ export default function Deliveries(props) {
         platform='android' 
         placeholder="Buscar..."
         round={true}
-        value={search}
-        onChangeText={(text) => setSearch(text)} 
+        value={searchedLog}
+        inputContainerStyle={styles.searchBarDelivery}
+        placeholderTextColor='#a5a5a5'
+        onChangeText={(text) => findALogByClient(text)} 
       />
         <LinearGradient style={styles.headRow} colors={['#2b8ff3', '#1cacdc']}> 
           <Table>
@@ -66,7 +83,7 @@ export default function Deliveries(props) {
           </Table>
         </LinearGradient>
         {
-          deliveries ?
+          filteredDeliveries ?
             <ScrollView refreshControl={
               <RefreshControl 
               refreshing={isLoading} 
@@ -100,7 +117,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   logView: {
-    marginBottom: 132,
+    marginBottom: 120,
   },
   headRow: {
     height: 55,
@@ -127,5 +144,9 @@ const styles = StyleSheet.create({
   },
   containerLoader: {
     paddingTop: 50
+  },
+  searchBarDelivery: {
+    backgroundColor: '#e9e9e9',
+    borderRadius: 10,
   }
 });

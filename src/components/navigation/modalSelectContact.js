@@ -37,6 +37,7 @@ export default function SelectContact(props) {
   function handleSelectContact(name, phone) {
     let formatedPhone = phone.replace(/ /g, '');
     formatedPhone = formatedPhone.replace('+598','0');
+    setSearchedContact('');
     onSelectContact(name, formatedPhone);
   }
 
@@ -60,7 +61,7 @@ export default function SelectContact(props) {
         />
         {
           !isLoadingContacts ?
-            <ScrollView style={{width: '100%'}}>
+            <ScrollView style={{width: '100%'}} keyboardShouldPersistTaps='always'>
               {
                 filteredContacts && filteredContacts.map((c, i) => c.phoneNumbers?.length > 0 && c.name && (
                   <TouchableOpacity style={styles.rowContact} key={i} onPress={()=> handleSelectContact(c.name, c.phoneNumbers[0].number) }>
