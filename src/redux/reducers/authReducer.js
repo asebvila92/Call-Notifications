@@ -9,7 +9,6 @@ import {
 } from '../constants';
 
 import { removeData, saveObject } from '../../helpers/asyncStorage';
-import { Alert } from 'react-native';
 
 const initialState = {
   isLoading: false,

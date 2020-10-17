@@ -119,6 +119,7 @@ export default function NewDelivery(props) {
             onChangeValue={setObservations}
             title='Observaciones'
             titleColor='#1885f2'
+            marginHorizontal={10}
             fontSize={18}
           />
         </View>
