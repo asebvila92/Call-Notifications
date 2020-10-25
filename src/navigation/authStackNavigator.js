@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useDispatch, useSelector} from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, Image } from 'react-native'
@@ -9,6 +10,7 @@ import NewDelivery from '../screens/newDelivery';
 import Deliveries from '../screens/deliveries';
 import Profile from '../screens/profile';
 import DetailsDelivery from '../screens/detailsDelivery';
+import { invokeGetMessageForClients } from '../redux/actions';
 
 const HomeStack = createStackNavigator();
 function HomeStackScreen() {
@@ -110,6 +112,8 @@ function AuthBottomNavigator() {
 
 const Stack = createStackNavigator();
 export default function AuthStackNavigatior() {
+  const token = useSelector(store => store.auth.token);
+  invokeGetMessageForClients(useDispatch(), token, 'default')
   return (
     <Stack.Navigator
     initialRouteName='Tabs'

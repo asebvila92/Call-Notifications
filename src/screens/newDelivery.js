@@ -25,7 +25,7 @@ export default function NewDelivery(props) {
   const [phone, setPhone] = useState('');
   const [observations, setObservations] = useState('');
   const [messageInfo, setMessageInfo] = useState(['','']);
-  const [modalIsVisible, setModalIsVisible] = useState(true)
+  const [modalIsVisible, setModalIsVisible] = useState(false)
   const userData = useSelector(store => store.auth.userData);
   const userToken = useSelector(store => store.auth.token);
   const isLoading = useSelector(store => store.deliveries.isLoading);

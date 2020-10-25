@@ -86,8 +86,8 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 5,
-    maxHeight: 630,
-    minHeight: 630,
+    maxHeight: 550,
+    minHeight: 550,
   },
   vwTitle: {
     flexDirection: 'row',

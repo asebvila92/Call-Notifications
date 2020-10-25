@@ -18,3 +18,19 @@ export const login = async (username, password) => {
   
   return axios.post(`${API_URL}/auth/login`, parameters)
 }
+
+export const getMessageById = (userToken, messageId) => {
+  return axios.get(`${API_URL}/messages/${messageId}`, {
+    headers: {
+      Authorization: 'Bearer ' + userToken,
+    }
+  })
+}
+
+export const updateMessageById = (userToken, message) => {
+  return axios.put(`${API_URL}/messages/${message.id}`, message,{
+    headers: {
+      Authorization: 'Bearer ' + userToken,
+    }
+  })
+}
