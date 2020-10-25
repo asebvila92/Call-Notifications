@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, ScrollView, Text, ActivityIndicator } from 'react-native';
-import { Icon } from 'react-native-elements';
+import { StyleSheet, View, ScrollView, ActivityIndicator } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import InputWithIcon from '../components/navigation/inputWithIcon';
 import ButtonWithGradient from '../components/navigation/buttonWithGradient';
 import DateTimePicker from '../components/navigation/DateTimePicker';
 import TextArea from '../components/navigation/textArea';
+import ModalSelectContact from '../components/navigation/modalSelectContact';
 import MessageResponse from '../components/navigation/messageResponse';
 import { invokeAddDelivery } from '../redux/actions';
 import { CLEAN_FLAGS } from '../redux/constants';
@@ -25,6 +25,7 @@ export default function NewDelivery(props) {
   const [phone, setPhone] = useState('');
   const [observations, setObservations] = useState('');
   const [messageInfo, setMessageInfo] = useState(['','']);
+  const [modalIsVisible, setModalIsVisible] = useState(false)
   const userData = useSelector(store => store.auth.userData);
   const userToken = useSelector(store => store.auth.token);
   const isLoading = useSelector(store => store.deliveries.isLoading);
@@ -76,6 +77,12 @@ export default function NewDelivery(props) {
     }
   }
 
+  function handleSelectContact(name, phone){
+    setClient(name);
+    setPhone(phone);
+    setModalIsVisible(false);
+  }
+
   function resetInputs() {
     setArticle('')
     setClient('')
@@ -88,6 +95,11 @@ export default function NewDelivery(props) {
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
       <View style={styles.content}>
+        <View style={styles.vwImportContact}>
+          <View style={{width:'30%'}}>
+            <ButtonWithGradient text='CONTACTOS' colorBegin='#37a53e' colorEnd='#30cc39' fontSize={12} marginTop={0} onPressbtn={() => setModalIsVisible(true)} />
+          </View>
+        </View>
         {messageInfo[0] === 'client' ? <MessageResponse isError={true} message={messageInfo[1]}/> : null}
         <InputWithIcon value={client} onChangeValue={setClient} placeholder='Cliente' iconType='font-awesome' iconName='user' color='#1885f2' />
         <InputWithIcon value={article} onChangeValue={setArticle} placeholder='Articulo' iconType='font-awesome' iconName='shopping-cart' color='#1885f2'/>
@@ -107,6 +119,7 @@ export default function NewDelivery(props) {
             onChangeValue={setObservations}
             title='Observaciones'
             titleColor='#1885f2'
+            marginHorizontal={10}
             fontSize={18}
           />
         </View>
@@ -118,6 +131,7 @@ export default function NewDelivery(props) {
         : null}
         <ButtonWithGradient text='GUARDAR' colorBegin='#1885f2' colorEnd='#1cacdc' disabled={isLoading} onPressbtn={saveDelivery} /> 
       </View>
+      <ModalSelectContact visible={modalIsVisible} onChangeVisibility={setModalIsVisible} onSelectContact={handleSelectContact} />
     </ScrollView>
   );
 }
@@ -129,16 +143,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   content: {
-    paddingTop: 20,
+    paddingTop: 0,
     padding: 5,
     flex: 1,
   },
-  title: {
-    fontSize: 20,
-    marginBottom: 20,
+  vwImportContact: {
+    maxHeight: 65,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: 0
   },
   vwInRow:{
     flexDirection: 'row',
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    alignItems: 'flex-start',
   },
 });

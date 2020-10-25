@@ -3,17 +3,17 @@ import { StyleSheet, TextInput } from 'react-native';
 
 
 export default function TextArea(props) {
-  const { value, onChangeValue, editable, title, titleColor, fontSize, fontStyle } = props
+  const { value, onChangeValue, editable, title, titleColor, fontSize, fontStyle, numberLines, marginHorizontal } = props
   
   return (
     <TextInput
       value={value}
       editable={editable}
       onChangeText={onChangeValue} 
-      style={{...styles.styles, fontSize: fontSize, fontStyle: fontStyle}}
+      style={{...styles.styles, fontSize: fontSize, fontStyle: fontStyle, marginHorizontal: marginHorizontal || 0}}
       placeholder={title}
       placeholderTextColor={titleColor}
-      numberOfLines={2} 
+      numberOfLines={numberLines || 2} 
       multiline={true} 
     />
   );
@@ -27,6 +27,5 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
-    marginHorizontal: 10
   }
 });

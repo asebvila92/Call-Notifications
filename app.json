@@ -6,7 +6,7 @@
     "platforms": [
       "android"
     ],
-    "version": "1.0.3",
+    "version": "1.0.5",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splashScreen1.png",
@@ -26,7 +26,7 @@
       "useNextNotificationsApi": true,
       "package": "com.halloweenkennel.halloweenkennel",
       "googleServicesFile": "./google-services.json",
-      "versionCode": 5
+      "versionCode": 7
     }
   }
 }

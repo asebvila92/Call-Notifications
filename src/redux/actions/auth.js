@@ -5,9 +5,14 @@ import {
   SET_DATA_FROM_ASYNCSTORAGE_PENDING,
   SET_DATA_FROM_ASYNCSTORAGE,
   SET_NULL_FROM_ASYNCSTORAGE,
+  GET_MESSAGE_SUCCESS,
+  GET_MESSAGE_ERROR,
+  CHANGE_MESSAGE_PENDING,
+  CHANGE_MESSAGE_SUCCESS,
+  CHANGE_MESSAGE_ERROR,
   LOG_OUT 
 } from '../constants';
-import { login } from '../../api/authService';
+import { login, updateMessageById, getMessageById } from '../../api/authService';
 import { getData } from '../../helpers/asyncStorage';
 
 export const invokeLogin = (dispatch, username, password) => {
@@ -46,6 +51,42 @@ export const getUserDataFromStorage = (dispatch) => {
     (error) => {
       dispatch({
         type: SET_NULL_FROM_ASYNCSTORAGE
+      })
+    }
+  )
+}
+
+export const invokeChangeMessage = (dispatch, userToken, message) => {
+  dispatch({
+    type: CHANGE_MESSAGE_PENDING,
+  })
+
+  updateMessageById(userToken, message).then(
+    (response) => {
+      dispatch({
+        type: CHANGE_MESSAGE_SUCCESS,
+        payload: response.data
+      })
+    },
+    (error) => {
+      dispatch({
+        type: CHANGE_MESSAGE_ERROR
+      })
+    }
+  )
+}
+
+export const invokeGetMessageForClients = (dispatch, userToken, messageId) => {
+  getMessageById(userToken, messageId).then(
+    (response) => {
+      dispatch({
+        type: GET_MESSAGE_SUCCESS,
+        payload: response.data
+      })
+    },
+    (error) => {
+      dispatch({
+        type: GET_MESSAGE_ERROR
       })
     }
   )
